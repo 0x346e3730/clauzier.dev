@@ -8,7 +8,7 @@ date: 2023-03-08
 
 ## Hello World ! 👋🏼
 
-This is a dummy blogpost while waiting for new ones to be published. 👀
+This is a dummy blogpost while waiting for new ones to be published, soon. 👀
 
 Make sure to follow me on my social medias that you can always find on the top right of the website.
 

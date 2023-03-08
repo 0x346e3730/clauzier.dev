@@ -1,4 +1,4 @@
-name: Notify blogpost
+name: Notify new blogpost
 
 on:
   push:
@@ -7,10 +7,11 @@ on:
       - content/**
 
 jobs:
-  notify-blogpost:
+  notify:
     runs-on: ubuntu-latest
     steps:
-    - uses: ethomson/send-tweet-action@v1
+    - name: Twitter notification
+      uses: ethomson/send-tweet-action@v1
       with:
         status: "I published a new article on my blog https://clauzier.dev/"
         consumer-key: ${{ secrets.TWITTER_CONSUMER_API_KEY }}
@@ -19,15 +20,15 @@ jobs:
         access-token-secret: ${{ secrets.TWITTER_ACCESS_TOKEN_SECRET }}
 
     - name: Discord notification (FR)
-    env:
-      DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK_FR }}
-    uses: Ilshidur/action-discord@master
-    with:
-      args: 'Un nouvel article de blog a été publié sur https://clauzier.dev/'
+      env:
+        DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK_FR }}
+      uses: Ilshidur/action-discord@master
+      with:
+        args: 'Un nouvel article de blog a été publié sur https://clauzier.dev/'
 
     - name: Discord notification (EN)
-    env:
-      DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK_EN }}
-    uses: Ilshidur/action-discord@master
-    with:
-      args: 'A new blog article has been published on https://clauzier.dev/'
+      env:
+        DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK_EN }}
+      uses: Ilshidur/action-discord@master
+      with:
+        args: 'A new blog article has been published on https://clauzier.dev/'
