@@ -6,7 +6,7 @@ description: The first blogpost of clauzier.dev
 date: 2023-03-08
 ---
 
-## Hello World !
+## Hello World ! 👋🏼
 
 This is a dummy blogpost while waiting for new ones to be published. 👀
 
