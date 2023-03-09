@@ -3,7 +3,7 @@ external: false
 draft: false
 title: Hello World
 description: The first blogpost of clauzier.dev
-date: 2023-03-08
+date: 2023-03-08 20:00:00
 ---
 
 ## Hello World ! 👋🏼

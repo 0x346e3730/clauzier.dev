@@ -24,7 +24,7 @@ jobs:
       run: yarn install --frozen-lockfile
 
     - name: Build production website
-      run: yarn astro build
+      run: yarn build
 
     - name: Deploy on dedicated
       uses: garygrossgarten/github-action-scp@release
