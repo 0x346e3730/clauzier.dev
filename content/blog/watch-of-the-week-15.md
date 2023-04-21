@@ -8,7 +8,7 @@ date: 2023-04-14 14:00:00
 
 ## Watch of the Week 15
 
-Welcome to this Watch of the Week ! It will be q really quick read...
+Welcome to this Watch of the Week ! It will be really quick read...
 
 I have nothing to share this week because my notes got lost 🙃
 
