@@ -3,7 +3,7 @@ external: false
 draft: false
 title: Watch of the Week 16
 description: What caught my attention during my technical watch, week 16
-date: 2023-04-14 15:15:00
+date: 2023-04-21 15:15:00
 ---
 
 ## Watch of the Week 16
