@@ -1,0 +1,76 @@
+---
+import { getCollection, type CollectionEntry } from 'astro:content';
+import Layout from '../../layouts/Layout.astro';
+
+interface Props {
+  post: CollectionEntry<'blog'>;
+}
+
+export async function getStaticPaths() {
+  const posts = await getCollection('blog');
+  return posts.map((post: CollectionEntry<'blog'>) => ({
+    params: { slug: post.slug },
+    props: { post },
+  }));
+}
+
+const { post } = Astro.props;
+
+// Redirect external posts
+if (post.data.external) {
+  return Astro.redirect(post.data.external.url);
+}
+
+const { Content } = await post.render();
+---
+
+<Layout pageTitle={post.data.title}>
+  <div class="w-full bg-[rgba(0,20,0,0.3)] border border-hacker-primary p-6 font-mono text-hacker-primary shadow-glow">
+    <div class="flex gap-2 text-lg mb-4">
+      <span class="text-hacker-primary">visitor@clauzier.dev</span>
+      <span class="text-hacker-primary">~</span>
+      <span class="text-hacker-primary">$</span>
+      <span class="text-hacker-primary">cat {post.slug}.md</span>
+    </div>
+
+    <article class="prose prose-invert prose-hacker mt-8">
+      <h1 class="text-3xl font-bold mb-4">{post.data.title}</h1>
+      <div class="mb-8 text-sm">
+        <time>{post.data.pubDate.toLocaleDateString('en-US', {
+          year: 'numeric',
+          month: 'long',
+          day: 'numeric'
+        })}</time>
+        {post.data.tags && (
+          <div class="mt-2">
+            {post.data.tags.map((tag: string) => (
+              <span class="mr-2 text-hacker-secondary">#{tag}</span>
+            ))}
+          </div>
+        )}
+      </div>
+      <Content />
+    </article>
+  </div>
+</Layout>
+
+<style>
+  /* Style markdown content */
+  :global(.prose-hacker) {
+    --tw-prose-invert-body: var(--hacker-primary);
+    --tw-prose-invert-headings: var(--hacker-primary);
+    --tw-prose-invert-links: var(--hacker-secondary);
+    --tw-prose-invert-bold: var(--hacker-primary);
+    --tw-prose-invert-counters: var(--hacker-primary);
+    --tw-prose-invert-bullets: var(--hacker-primary);
+    --tw-prose-invert-hr: var(--hacker-primary);
+    --tw-prose-invert-quotes: var(--hacker-primary);
+    --tw-prose-invert-quote-borders: var(--hacker-secondary);
+    --tw-prose-invert-captions: var(--hacker-primary);
+    --tw-prose-invert-code: var(--hacker-primary);
+    --tw-prose-invert-pre-code: var(--hacker-primary);
+    --tw-prose-invert-pre-bg: var(--hacker-terminal);
+    --tw-prose-invert-th-borders: var(--hacker-secondary);
+    --tw-prose-invert-td-borders: var(--hacker-primary);
+  }
+</style> 

@@ -1,0 +1,150 @@
+---
+// import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import '../styles/global.css';
+import Navigation from '../components/Navigation.astro';
+
+interface Props {
+	title?: string;
+	pageTitle?: string;
+}
+
+const { title, pageTitle } = Astro.props;
+---
+<html lang="en" class="bg-hacker-terminal">
+	<head>
+    <meta charset="utf-8" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="viewport" content="width=device-width" />
+    <!-- Monaspace Fonts from CDN -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/monaspace@1.0.0/monaspace-neon.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/monaspace@1.0.0/monaspace-argon.css" />
+    <title>{pageTitle}</title>
+    <script async defer src="https://tianji.clauzier.dev/tracker.js" data-website-id="cm28mcmud0001s8kxdabtvhei"></script>
+	</head>
+  <body class="bg-hacker-terminal font-mono text-hacker-primary min-h-screen relative overflow-x-hidden antialiased">
+		<!-- Matrix rain overlay -->
+		<div class="fixed inset-0 pointer-events-none bg-matrix-rain animate-matrix opacity-30"></div>
+		<!-- Scan line effect -->
+		<div class="fixed inset-0 pointer-events-none bg-gradient-to-b from-transparent via-hacker-primary to-transparent opacity-5 animate-scan-line"></div>
+
+		<div class="relative z-10 min-h-screen flex flex-col">
+			<div class="mx-auto w-full max-w-6xl px-4 sm:px-6 flex flex-col gap-12 py-8 flex-grow">
+				<Navigation />
+        <main class="text-hacker-primary w-full flex-grow">
+          <div class="w-full bg-[rgba(0,20,0,0.3)] border border-hacker-primary p-6 font-mono shadow-glow">
+						<div id="content-container" class="relative">
+							<slot />
+						</div>
+					</div>
+				</main>
+			</div>
+			<div class="w-full border-t border-hacker-primary/30 mt-12">
+				<div class="mx-auto w-full max-w-6xl px-4 sm:px-6 py-6">
+					<Footer />
+				</div>
+			</div>
+		</div>
+		
+		<!-- Terminal cursor effect -->
+		<div class="fixed bottom-4 right-4 w-3 h-6 bg-hacker-primary animate-terminal-blink"></div>
+
+<style is:global>
+  :root {
+    --hacker-primary: #00ff00;
+    --hacker-secondary: #003300;
+  }
+
+  html {
+    background-color: #000;
+  }
+
+  body {
+    background-color: #000;
+    font-family: 'Monaspace Argon', monospace;
+    font-size: 15px;
+    line-height: 1.7;
+    font-feature-settings: "calt" 1, "liga" 0, "ss01" 1, "ss02" 1, "ss03" 1, "ss04" 1, "ss05" 1, "ss06" 1, "ss07" 1, "ss08" 1;
+  }
+
+  .glitch-container {
+    text-shadow: 
+      0 0 5px rgba(0, 255, 0, 0.8),
+      0 0 10px rgba(0, 255, 0, 0.4),
+      0 0 15px rgba(0, 255, 0, 0.2);
+  }
+
+  ::selection {
+    background-color: rgba(0, 255, 0, 0.3);
+    color: var(--hacker-primary);
+  }
+</style>
+  </body>
+</html>
+
+<style>
+  :root {
+    background-color: #0C0C0C;
+    color: var(--hacker-primary);
+  }
+
+  html, body {
+    background-color: #0C0C0C;
+    min-height: 100vh;
+    color: var(--hacker-primary);
+  }
+
+  /* Force all text elements to use our hacker theme colors */
+  :global(h1), :global(h2), :global(h3), :global(h4), :global(h5), :global(h6) {
+    color: var(--hacker-primary) !important;
+    font-family: 'Monaspace Neon', monospace;
+    font-weight: 600;
+    letter-spacing: -0.02em;
+  }
+
+  :global(p), :global(li), :global(span), :global(div) {
+    color: var(--hacker-primary) !important;
+    font-family: 'Monaspace Argon', monospace;
+  }
+
+  :global(a) {
+    color: var(--hacker-primary) !important;
+    text-decoration: none;
+    position: relative;
+    transition: all 0.2s ease-in-out;
+    font-family: 'Monaspace Neon', monospace;
+    font-weight: 500;
+  }
+  
+  :global(a:hover) {
+    color: var(--hacker-primary) !important;
+    text-shadow: 0 0 8px rgba(0, 255, 0, 0.8);
+    opacity: 0.8;
+  }
+  
+  :global(a::before) {
+    content: '>';
+    position: absolute;
+    left: -1em;
+    opacity: 0;
+    transition: opacity 0.2s;
+    color: var(--hacker-primary) !important;
+  }
+  
+  :global(a:hover::before) {
+    opacity: 1;
+  }
+
+  .cursor-blink {
+    animation: blink 1s step-end infinite;
+  }
+
+  @keyframes blink {
+    from, to { opacity: 1; }
+    50% { opacity: 0; }
+  }
+
+  .shadow-glow {
+    box-shadow: 0 0 20px rgba(0, 255, 0, 0.1);
+  }
+</style>

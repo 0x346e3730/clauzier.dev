@@ -1,0 +1,129 @@
+---
+import type { Experience as ExperienceType, ColorType, DateInfo, LocationType } from '../data/experiences';
+import { Icon } from 'astro-icon/components';
+
+interface Props {
+  experience: ExperienceType;
+}
+
+const { experience: exp } = Astro.props;
+
+const getTagColor = (colorType: ColorType) => {
+  switch (colorType) {
+    case 'primary':
+      return 'bg-hacker-primary text-black border-2 border-hacker-primary shadow-[0_0_10px_rgba(0,255,0,0.3)]';
+    case 'secondary':
+      return 'bg-hacker-primary/10 border-2 border-hacker-primary text-hacker-primary shadow-[0_0_5px_rgba(0,255,0,0.2)]';
+    case 'tertiary':
+      return 'bg-transparent border border-dashed border-hacker-primary/50 text-hacker-primary/90';
+    default:
+      return 'bg-hacker-darker border border-hacker-primary/30';
+  }
+};
+
+const getTagStyle = (tag: { label: string, colorType: ColorType }) => {
+  if (tag.label === "Current") {
+    return 'bg-hacker-primary text-black border-2 border-hacker-primary shadow-[0_0_10px_rgba(0,255,0,0.6),0_0_20px_rgba(0,255,0,0.4)]';
+  }
+  if (tag.label === "Full-time") {
+    return 'bg-hacker-primary/10 border-2 border-hacker-primary text-hacker-primary shadow-[0_0_5px_rgba(0,255,0,0.2)]';
+  }
+  if (tag.label === "Volunteer") {
+    return 'bg-transparent border-2 border-dashed border-hacker-primary/50 text-hacker-primary/90';
+  }
+  return getTagColor(tag.colorType);
+};
+
+const formatDate = (date: DateInfo) => {
+  const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+  return `${months[date.month - 1]} ${date.year}`;
+};
+
+const calculateDuration = (start: DateInfo, end: DateInfo | null) => {
+  const endDate = end || { month: new Date().getMonth() + 1, year: new Date().getFullYear() };
+  
+  // Calculate months including both start and end month
+  let months = (endDate.year - start.year) * 12 + (endDate.month - start.month) + 1;
+  
+  const years = Math.floor(months / 12);
+  const remainingMonths = months % 12;
+  
+  if (years === 0) {
+    return `${remainingMonths} ${remainingMonths === 1 ? 'month' : 'months'}`;
+  } else if (remainingMonths === 0) {
+    return `${years} ${years === 1 ? 'year' : 'years'}`;
+  } else {
+    return `${years} ${years === 1 ? 'year' : 'years'} ${remainingMonths} ${remainingMonths === 1 ? 'month' : 'months'}`;
+  }
+};
+
+const formatLocation = (location: LocationType) => {
+  return location === 'remote' ? '[REMOTE]' : '[ON-SITE]';
+};
+
+const isCurrentPosition = !exp.endDate;
+const duration = calculateDuration(exp.startDate, exp.endDate);
+---
+
+<div class="border border-hacker-primary p-4 rounded bg-[rgba(0,20,0,0.3)] hover:shadow-[0_0_20px_rgba(0,255,0,0.1)] transition-shadow duration-300">
+  <div class="flex flex-col sm:flex-row justify-between items-start gap-2 mb-2">
+    <div>
+      <h3 class="text-xl font-bold hover:text-hacker-primary/80 transition-colors duration-300">{exp.title}</h3>
+      <p class="text-lg opacity-90 flex items-center gap-2">
+        <span>{exp.company}</span>
+        <span class="text-sm opacity-60">• {duration}</span>
+      </p>
+      <div class="flex flex-wrap gap-2 mt-2">
+        {exp.tags?.map((tag) => (
+          <span class={`px-2 py-0.5 text-sm rounded-sm font-medium ${getTagStyle(tag)}`}>
+            {tag.label}
+          </span>
+        ))}
+      </div>
+    </div>
+    <div class="text-right text-sm opacity-80">
+      <p>{formatLocation(exp.location)}</p>
+      <p>{formatDate(exp.startDate)} - {exp.endDate ? formatDate(exp.endDate) : 'Present'}</p>
+    </div>
+  </div>
+  
+  <ul class="list-disc list-inside space-y-1 text-base opacity-90 mb-4">
+    {exp.description.map((desc) => (
+      <li class="leading-relaxed">{desc}</li>
+    ))}
+  </ul>
+
+  {exp.testimonial && (
+    <div class="border-t border-hacker-primary/30 pt-4">
+      <details class="group">
+        <summary class="cursor-pointer list-none flex items-center gap-2 text-sm hover:text-hacker-primary/80 transition-colors">
+          <Icon name="ph:quotes" class="w-4 h-4" />
+          <span>Manager's Testimonial</span>
+          <Icon 
+            name="ph:caret-down" 
+            class="w-4 h-4 transition-transform duration-300 group-open:rotate-180" 
+          />
+        </summary>
+        <div class="mt-4 pl-4 border-l-2 border-hacker-primary/30">
+          <p class="text-sm italic opacity-90 mb-2">{exp.testimonial.quote}</p>
+          <div class="text-sm">
+            <p class="font-bold">{exp.testimonial.author}</p>
+            <p class="opacity-80">{exp.testimonial.title}</p>
+          </div>
+        </div>
+      </details>
+    </div>
+  )}
+</div>
+
+<style>
+  .shadow-glow-strong {
+    box-shadow: 0 0 10px rgba(0, 255, 0, 0.4),
+                0 0 20px rgba(0, 255, 0, 0.2),
+                0 0 30px rgba(0, 255, 0, 0.1);
+  }
+
+  details summary::-webkit-details-marker {
+    display: none;
+  }
+</style> 

@@ -1,0 +1,30 @@
+---
+import { Icon } from 'astro-icon/components';
+import { calculateExperience } from '../utils/experience';
+
+const birthDate = new Date('1998-05-22'); // Your birthdate
+const today = new Date();
+const age = today.getFullYear() - birthDate.getFullYear() - 
+    (today.getMonth() < birthDate.getMonth() || 
+    (today.getMonth() === birthDate.getMonth() && today.getDate() < birthDate.getDate()) ? 1 : 0);
+
+const experience = calculateExperience();
+---
+
+<div class="flex gap-2 text-lg">
+  <span class="text-hacker-primary">visitor@clauzier.dev</span>
+  <span class="text-hacker-primary">~</span>
+  <span class="text-hacker-primary">$</span>
+  <span class="text-hacker-primary">whoami</span>
+</div>
+<div class="text-base leading-relaxed whitespace-pre-wrap mb-6">Antonin CLAUZIER, {age} years old passionate Lead Dev based in Saint-Denis, La Réunion.</div>
+
+<div class="flex gap-2 text-lg">
+  <span class="text-hacker-primary">visitor@clauzier.dev</span>
+  <span class="text-hacker-primary">~</span>
+  <span class="text-hacker-primary">$</span>
+  <span class="text-hacker-primary">cat about.md</span>
+</div>
+<div class="text-base leading-relaxed whitespace-pre-wrap">{experience.years}+ years of experience in the tech industry, especially e-commerce and healthcare.
+Also co-founded and been the president of the biggest e-sports fan club in the world.
+Now offering some of my free time, knowledge and skillsets to an association that saves animals.</div>

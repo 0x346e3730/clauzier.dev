@@ -1,0 +1,102 @@
+---
+import { Icon } from 'astro-icon/components';
+
+const currentYear = new Date().getFullYear();
+const mode = import.meta.env.MODE;
+
+// Get Astro version from generator
+const generator = Astro.generator;
+
+// Format build date in Paris timezone
+const buildDate = new Date().toLocaleString('en-US', { 
+  timeZone: 'Europe/Paris',
+  month: 'short',
+  day: 'numeric',
+  year: 'numeric',
+  hour: '2-digit',
+  minute: '2-digit',
+  hour12: false
+});
+---
+
+<footer class="flex flex-col sm:flex-row justify-between items-center gap-4">
+  <div class="flex flex-col sm:flex-row items-center gap-2">
+    <span class="text-sm opacity-80">© {currentYear} Antonin CLAUZIER</span>
+    <span class="text-xs opacity-60 hidden sm:inline">•</span>
+    <span class="text-xs opacity-60">
+      Built with <span class="opacity-80">{generator}</span> <span class="opacity-80">on {buildDate}</span>
+    </span>
+  </div>
+  <div class="flex justify-end gap-2">
+    <a href="https://linkedin.com/in/0x346e3730/" target="_blank" rel="noopener noreferrer" class="social-link w-6 h-6 hover:text-hacker-primary transition-colors">
+      <Icon name="ph:linkedin-logo" class="w-full h-full" />
+      <span class="sr-only">Visit my LinkedIn profile</span>
+    </a>
+    <a href="https://github.com/0x346e3730/" target="_blank" rel="noopener noreferrer" class="social-link w-6 h-6 hover:text-hacker-primary transition-colors">
+      <Icon name="ph:github-logo" class="w-full h-full" />
+      <span class="sr-only">Visit my GitHub profile</span>
+    </a>
+    <a href="https://connect.symfony.com/profile/0x346e3730" target="_blank" rel="noopener noreferrer" class="social-link w-6 h-6 hover:text-hacker-primary transition-colors">
+      <Icon name="la:symfony" class="w-full h-full" />
+      <span class="sr-only">Visit my Symfony Connect profile</span>
+    </a>
+    <a href="https://x.com/0x346e3730/" target="_blank" rel="noopener noreferrer" class="social-link w-6 h-6 hover:text-hacker-primary transition-colors">
+      <Icon name="ph:x-logo" class="w-full h-full" />
+      <span class="sr-only">Visit my X (formerly Twitter) profile</span>
+    </a>
+    <a href="https://instagram.com/0x346e3730/" target="_blank" rel="noopener noreferrer" class="social-link w-6 h-6 hover:text-hacker-primary transition-colors">
+      <Icon name="ph:instagram-logo" class="w-full h-full" />
+      <span class="sr-only">Visit my Instagram profile</span>
+    </a>
+    <a href="https://twitch.com/0x346e3730/" target="_blank" rel="noopener noreferrer" class="social-link w-6 h-6 hover:text-hacker-primary transition-colors">
+      <Icon name="ph:twitch-logo" class="w-full h-full" />
+      <span class="sr-only">Visit my Twitch channel</span>
+    </a>
+  </div>
+</footer>
+
+<style>
+  .bg-scan-line {
+    background: linear-gradient(
+      to bottom,
+      transparent 0%,
+      rgba(0, 255, 0, 0.05) 50%,
+      transparent 100%
+    );
+    background-size: 100% 4px;
+    animation: scan 4s linear infinite;
+  }
+
+  @keyframes scan {
+    from {
+      background-position: 0 -100vh;
+    }
+    to {
+      background-position: 0 100vh;
+    }
+  }
+
+  @media (max-width: 640px) {
+    footer {
+      padding: 1rem;
+    }
+  }
+
+  /* Remove arrow hover effect for social links */
+  .social-link::before {
+    display: none;
+  }
+
+  /* Hide text visually but keep it accessible to screen readers */
+  .sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+  }
+</style> 

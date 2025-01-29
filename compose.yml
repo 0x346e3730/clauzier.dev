@@ -1,0 +1,23 @@
+services:
+  website:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    networks:
+      - caddy
+    restart: unless-stopped
+    labels:
+      caddy: clauzier.dev
+      caddy.reverse_proxy: "{{upstreams 4321}}"
+      # Cache static assets
+      caddy.header: |
+        Cache-Control "public, max-age=31536000" /assets/*
+        Cache-Control "public, max-age=31536000" /*.{jpg,jpeg,png,gif,ico,svg,webp}
+        Cache-Control "public, max-age=31536000" /*.{css,js}
+        Cache-Control "public, max-age=3600" /
+      # Enable compression
+      caddy.encode: "gzip zstd"
+
+networks:
+  caddy:
+    external: true 

@@ -1,0 +1,56 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { getCollection } from 'astro:content';
+import type { CollectionEntry } from 'astro:content';
+
+const posts = await getCollection('blog');
+posts.sort((a: CollectionEntry<'blog'>, b: CollectionEntry<'blog'>) => 
+  b.data.pubDate.valueOf() - a.data.pubDate.valueOf()
+);
+---
+
+<Layout pageTitle="Blog">
+  <div class="flex gap-2 text-lg mb-4">
+    <span class="text-hacker-primary">visitor@clauzier.dev</span>
+    <span class="text-hacker-primary">~</span>
+    <span class="text-hacker-primary">$</span>
+    <span class="text-hacker-primary">cd blogposts/</span>
+  </div>
+
+  <div class="flex gap-2 text-lg mb-8">
+    <span class="text-hacker-primary">visitor@clauzier.dev</span>
+    <span class="text-hacker-primary">~/blogposts</span>
+    <span class="text-hacker-primary">$</span>
+    <span class="text-hacker-primary">ll</span>
+  </div>
+
+  <div class="space-y-2 font-mono">
+    {posts.map((post: CollectionEntry<'blog'>) => (
+      <div class="flex items-center gap-4">
+        <span class="text-hacker-secondary">drwxr-xr-x</span>
+        <span class="text-hacker-primary w-32">{post.data.pubDate.toLocaleDateString('fr-FR', { year: 'numeric', month: '2-digit', day: '2-digit' })}</span>
+        {post.data.external ? (
+          <a 
+            href={post.data.external.url} 
+            target="_blank" 
+            rel="noopener noreferrer" 
+            class="hover:text-hacker-secondary transition-colors flex items-center gap-2"
+          >
+            {post.data.title}
+            <span class="text-xs text-hacker-secondary">↗ {post.data.external.site}</span>
+          </a>
+        ) : (
+          <a href={`/blog/${post.slug}`} class="hover:text-hacker-secondary transition-colors">
+            {post.data.title}
+          </a>
+        )}
+      </div>
+    ))}
+    <div class="flex items-center gap-4 text-hacker-secondary">
+      <span>total {posts.length} {posts.length === 1 ? 'post' : 'posts'}</span>
+    </div>
+  </div>
+</Layout>
+
+<style>
+</style>
