@@ -1,1 +1,7 @@
+/* Base styles */
 @import "tailwindcss";
+
+/* Fonts */
+@import '@fontsource/monaspace-neon';
+@import '@fontsource/monaspace-radon';
+@import '@fontsource/monaspace-argon';

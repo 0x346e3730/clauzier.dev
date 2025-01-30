@@ -1,6 +1,7 @@
 ---
 import { getCollection, type CollectionEntry } from 'astro:content';
 import Layout from '../../layouts/Layout.astro';
+import TerminalPrompt from '../../components/TerminalPrompt.astro';
 
 interface Props {
   post: CollectionEntry<'blog'>;
@@ -22,36 +23,47 @@ if (post.data.external) {
 }
 
 const { Content } = await post.render();
+
+// Format date for meta tags
+const formattedDate = post.data.pubDate.toISOString();
+const readableDate = post.data.pubDate.toLocaleDateString('en-US', {
+  year: 'numeric',
+  month: 'long',
+  day: 'numeric'
+});
+
+// Prepare meta description
+const metaDescription = post.data.description || `Read ${post.data.title} by Antonin CLAUZIER`;
 ---
 
-<Layout pageTitle={post.data.title}>
-  <div class="w-full bg-[rgba(0,20,0,0.3)] border border-hacker-primary p-6 font-mono text-hacker-primary shadow-glow">
-    <div class="flex gap-2 text-lg mb-4">
-      <span class="text-hacker-primary">visitor@clauzier.dev</span>
-      <span class="text-hacker-primary">~</span>
-      <span class="text-hacker-primary">$</span>
-      <span class="text-hacker-primary">cat {post.slug}.md</span>
-    </div>
+<Layout 
+  pageTitle={`Antonin CLAUZIER - Blog - ${post.data.title}`}
+>
+  <TerminalPrompt command={`cat ${post.slug}.md`} />
 
-    <article class="prose prose-invert prose-hacker mt-8">
-      <h1 class="text-3xl font-bold mb-4">{post.data.title}</h1>
-      <div class="mb-8 text-sm">
-        <time>{post.data.pubDate.toLocaleDateString('en-US', {
-          year: 'numeric',
-          month: 'long',
-          day: 'numeric'
-        })}</time>
-        {post.data.tags && (
-          <div class="mt-2">
-            {post.data.tags.map((tag: string) => (
-              <span class="mr-2 text-hacker-secondary">#{tag}</span>
-            ))}
-          </div>
-        )}
-      </div>
+  <article class="prose prose-invert prose-hacker mt-8 prose-headings:font-bold prose-a:no-underline" itemscope itemtype="http://schema.org/BlogPosting">
+    <meta itemprop="datePublished" content={formattedDate} />
+    <meta itemprop="dateModified" content={formattedDate} />
+    <meta itemprop="author" content="Antonin CLAUZIER" />
+    <meta itemprop="description" content={metaDescription} />
+    <meta itemprop="url" content={Astro.url.href} />
+    {post.data.tags && <meta itemprop="keywords" content={post.data.tags.join(', ')} />}
+
+    <h1 class="text-2xl sm:text-3xl font-bold mb-4 break-words" itemprop="headline">{post.data.title}</h1>
+    <div class="mb-8 text-sm metadata">
+      <time datetime={formattedDate} itemprop="datePublished">{readableDate}</time>
+      {post.data.tags && (
+        <div class="mt-2 flex flex-wrap gap-2" role="list" aria-label="Post tags">
+          {post.data.tags.map((tag: string) => (
+            <span class="text-hacker-secondary tag" role="listitem">#{tag}</span>
+          ))}
+        </div>
+      )}
+    </div>
+    <div itemprop="articleBody">
       <Content />
-    </article>
-  </div>
+    </div>
+  </article>
 </Layout>
 
 <style>
@@ -72,5 +84,69 @@ const { Content } = await post.render();
     --tw-prose-invert-pre-bg: var(--hacker-terminal);
     --tw-prose-invert-th-borders: var(--hacker-secondary);
     --tw-prose-invert-td-borders: var(--hacker-primary);
+  }
+
+  /* Ensure code blocks don't overflow on mobile */
+  :global(.prose pre) {
+    overflow-x: auto;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    padding: 1rem;
+    border-radius: 0.25rem;
+    border: 1px solid var(--hacker-primary);
+  }
+
+  :global(.prose img) {
+    max-width: 100%;
+    height: auto;
+    border-radius: 0.25rem;
+    border: 1px solid var(--hacker-primary);
+  }
+
+  :global(.prose a:hover) {
+    color: var(--hacker-primary) !important;
+    text-shadow: 0 0 8px rgba(0, 255, 0, 0.8);
+  }
+
+  /* Optimize table display */
+  :global(.prose table) {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 1.5rem 0;
+  }
+
+  :global(.prose th), :global(.prose td) {
+    padding: 0.75rem;
+    border: 1px solid var(--hacker-primary);
+  }
+
+  :global(.prose blockquote) {
+    font-style: italic;
+    border-left-width: 0.25rem;
+    padding-left: 1rem;
+    margin: 1.5rem 0;
+  }
+
+  /* Optimize lists */
+  :global(.prose ul), :global(.prose ol) {
+    margin: 1.5rem 0;
+    padding-left: 1.5rem;
+  }
+
+  :global(.prose li) {
+    margin: 0.5rem 0;
+  }
+
+  /* Optimize headings */
+  :global(.prose h2), :global(.prose h3), :global(.prose h4) {
+    margin-top: 2rem;
+    margin-bottom: 1rem;
+  }
+
+  /* Optimize inline code */
+  :global(.prose code:not(pre code)) {
+    padding: 0.2em 0.4em;
+    background-color: rgba(0, 255, 0, 0.1);
+    border-radius: 0.25rem;
   }
 </style> 

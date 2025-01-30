@@ -11,28 +11,34 @@ const { href, icon, label } = Astro.props;
 ---
 <a 
     href={href}
-    class="social-link group/link relative flex items-center justify-center w-8 h-8"
-    aria-label={label}
+    target="_blank"
+    rel="noopener noreferrer me"
+    class="social-link w-6 h-6 hover:text-hacker-primary transition-colors"
+    aria-label={`Visit my ${label} profile`}
 >
-    <span class="nav-arrow absolute -left-4 opacity-0 transform translate-x-2 transition-all duration-300 group-hover/link:opacity-100 group-hover/link:translate-x-0">&gt;</span>
-    <Icon name={icon} class="w-6 h-6 transition-all duration-300 group-hover/link:scale-110" />
+    <Icon name={icon} class="w-full h-full" aria-hidden="true" />
 </a>
 
 <style>
     .social-link {
-        color: #0f0;
-        transition: all 0.3s ease;
         position: relative;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .social-link::before {
+        display: none;
     }
 
     .social-link:hover {
-        filter: drop-shadow(0 0 10px rgba(0, 255, 0, 0.8));
+        transform: scale(1.1);
+        transition: transform 0.2s ease-in-out;
     }
 
-    @media (max-width: 640px) {
-        .social-link [data-icon] {
-            width: 1.25rem;
-            height: 1.25rem;
+    @media (prefers-reduced-motion: reduce) {
+        .social-link:hover {
+            transform: none;
         }
     }
 </style> 

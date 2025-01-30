@@ -1,43 +1,21 @@
 ---
 interface Props {
     href: string;
-    className?: string;
 }
 
-const { href, className = "" } = Astro.props;
+const { href } = Astro.props;
 ---
 <a 
     href={href} 
-    class={`group relative px-4 py-2 font-terminal
-    text-hacker-primary hover:text-hacker-secondary
-    transition-all duration-300
-    hover:bg-hacker-dark/30
-    active:scale-95
-    tracking-wider ${className}`}
+    class="group relative hover:text-hacker-secondary transition-colors"
 >
-    <span class="relative z-10">
-        <slot />
-    </span>
+    <slot />
     
     <!-- Terminal-style hover effect -->
     <span class="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 overflow-hidden before:content-[''] before:absolute before:inset-0 before:bg-gradient-to-r before:from-transparent before:via-hacker-primary/10 before:to-transparent before:animate-scan-line"></span>
 </a>
 
 <style>
-    a::before {
-        content: '>';
-        position: absolute;
-        left: -.1em;
-        opacity: 0;
-        transition: opacity 0.2s;
-        color: currentColor;
-    }
-
-    a:hover::before {
-        opacity: 1;
-    }
-
-    /* Glitch effect on hover */
     a:hover {
         text-shadow: 0 0 8px rgba(0, 255, 0, 0.8);
     }

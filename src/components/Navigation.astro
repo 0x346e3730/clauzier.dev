@@ -1,62 +1,40 @@
 ---
 import NavLink from './NavLink.astro';
+
+const navItems = [
+  { href: '/blog/', label: 'BLOG' },
+  { href: '/', label: 'HOME' },
+  { href: '/resume/', label: 'RESUME' }
+];
 ---
-<nav class="w-full border border-hacker-primary bg-hacker-darker/50 backdrop-blur-sm py-5 px-4 sm:py-7 sm:px-6 rounded relative overflow-hidden group">
+<nav 
+  class="w-full h-16 border border-hacker-primary bg-hacker-darker/50 backdrop-blur-sm rounded relative overflow-hidden group"
+  role="navigation"
+  aria-label="Main navigation"
+>
     <!-- Glitch effect container -->
-    <div class="absolute inset-0 opacity-50 group-hover:animate-glitch pointer-events-none border border-hacker-primary"></div>
+    <div class="absolute inset-0 opacity-50 group-hover:animate-glitch pointer-events-none border border-hacker-primary" aria-hidden="true"></div>
     
-    <div class="flex justify-center items-center gap-16 relative z-10 w-full text-base sm:text-lg md:text-xl">
-        <NavLink href="/blog/" className="nav-link group/link relative flex items-center py-1">
-            <span class="nav-arrow absolute -left-6 opacity-0 transform translate-x-2 transition-all duration-300 group-hover/link:opacity-100 group-hover/link:translate-x-0">&gt;</span>
-            <span>[BLOG]</span>
-        </NavLink>
-        <NavLink href="/" className="nav-link group/link relative flex items-center py-1">
-            <span class="nav-arrow absolute -left-6 opacity-0 transform translate-x-2 transition-all duration-300 group-hover/link:opacity-100 group-hover/link:translate-x-0">&gt;</span>
-            <span>[HOME]</span>
-        </NavLink>
-        <NavLink href="/resume/" className="nav-link group/link relative flex items-center py-1">
-            <span class="nav-arrow absolute -left-6 opacity-0 transform translate-x-2 transition-all duration-300 group-hover/link:opacity-100 group-hover/link:translate-x-0">&gt;</span>
-            <span>[RESUME]</span>
-        </NavLink>
-    </div>
+    <ul class="h-full flex justify-center items-center relative z-10">
+        {navItems.map(({ href, label }) => (
+          <li class="px-12">
+            <NavLink href={href}>[{label}]</NavLink>
+          </li>
+        ))}
+    </ul>
     
     <!-- Corner decorations -->
-    <div class="absolute top-0 left-0 w-2 sm:w-3 h-2 sm:h-3 border-l-2 border-t-2 border-hacker-primary"></div>
-    <div class="absolute top-0 right-0 w-2 sm:w-3 h-2 sm:h-3 border-r-2 border-t-2 border-hacker-primary"></div>
-    <div class="absolute bottom-0 left-0 w-2 sm:w-3 h-2 sm:h-3 border-l-2 border-b-2 border-hacker-primary"></div>
-    <div class="absolute bottom-0 right-0 w-2 sm:w-3 h-2 sm:h-3 border-r-2 border-b-2 border-hacker-primary"></div>
+    <div class="absolute top-0 left-0 w-2 h-2 border-l-2 border-t-2 border-hacker-primary" aria-hidden="true"></div>
+    <div class="absolute top-0 right-0 w-2 h-2 border-r-2 border-t-2 border-hacker-primary" aria-hidden="true"></div>
+    <div class="absolute bottom-0 left-0 w-2 h-2 border-l-2 border-b-2 border-hacker-primary" aria-hidden="true"></div>
+    <div class="absolute bottom-0 right-0 w-2 h-2 border-r-2 border-b-2 border-hacker-primary" aria-hidden="true"></div>
 </nav>
 
 <style>
-    .nav-link {
-        position: relative;
-        transition: all 0.3s ease;
-    }
-
-    .nav-arrow {
-        position: absolute;
-        left: -1rem;
-        opacity: 0;
-        transform: translateX(0.5rem);
-        transition: all 0.3s ease;
-    }
-
-    .nav-link:hover .nav-arrow {
-        opacity: 1;
-        transform: translateX(0);
-    }
-
-    .nav-link:hover {
-        text-shadow: 0 0 8px rgba(0, 255, 0, 0.8);
-        transform: translateX(0.25rem);
-    }
-
     nav::before {
         content: '';
         position: absolute;
-        top: 0;
-        left: 0;
-        right: 0;
+        inset: 0 0 auto 0;
         height: 1px;
         background: linear-gradient(90deg, transparent, #00ff00, transparent);
         animation: scan-line 2s linear infinite;
@@ -65,15 +43,5 @@ import NavLink from './NavLink.astro';
     @keyframes scan-line {
         0% { transform: translateX(-100%); }
         100% { transform: translateX(100%); }
-    }
-
-    @media (max-width: 640px) {
-        .nav-link {
-            padding: 0.25rem;
-        }
-
-        .nav-arrow {
-            left: -1rem;
-        }
     }
 </style>

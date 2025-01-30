@@ -1,0 +1,20 @@
+---
+interface Props {
+    command: string;
+    path?: string;
+}
+
+const { command, path = "~" } = Astro.props;
+---
+<div class="flex gap-2 text-lg mb-4 flex-wrap" role="presentation" aria-hidden="true">
+    <span class="terminal-prompt text-hacker-primary">visitor@clauzier.dev</span>
+    <span class="terminal-prompt text-hacker-primary">{path}</span>
+    <span class="terminal-prompt text-hacker-primary">$</span>
+    <span class="command text-hacker-primary break-all">{command}</span>
+</div>
+
+<style>
+  .terminal-prompt, .command {
+    user-select: none;
+  }
+</style> 

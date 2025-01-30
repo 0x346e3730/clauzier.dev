@@ -11,7 +11,7 @@ interface Props {
 const { src, alt, class: className } = Astro.props;
 ---
 
-<div class="profile-container relative w-32 h-32 mb-8">
+<div class="profile-container relative w-32 h-32">
   <div class="absolute inset-0 border-2 border-hacker-primary rounded-sm overflow-hidden">
     <Image 
       src={src} 
@@ -34,24 +34,20 @@ const { src, alt, class: className } = Astro.props;
 
 <style>
   @keyframes scan {
-    from {
-      transform: translateY(-100%);
-    }
-    to {
-      transform: translateY(100%);
-    }
+    from { transform: translateY(-100%); }
+    to { transform: translateY(100%); }
   }
 
   @keyframes glitch-1 {
     0%, 100% { transform: none; opacity: 0; }
-    50% { transform: translate(10px, 0); opacity: 0.1; }
-    25%, 75% { transform: translate(-10px, 0); opacity: 0.1; }
+    50% { transform: translate(10px); opacity: 0.1; }
+    25%, 75% { transform: translate(-10px); opacity: 0.1; }
   }
 
   @keyframes glitch-2 {
     0%, 100% { transform: none; opacity: 0; }
-    50% { transform: translate(-10px, 0); opacity: 0.1; }
-    25%, 75% { transform: translate(10px, 0); opacity: 0.1; }
+    50% { transform: translate(-10px); opacity: 0.1; }
+    25%, 75% { transform: translate(10px); opacity: 0.1; }
   }
 
   .animate-scan {
@@ -71,10 +67,7 @@ const { src, alt, class: className } = Astro.props;
   .profile-container::before {
     content: '';
     position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
+    inset: 0;
     background: repeating-linear-gradient(
       transparent 0px,
       transparent 1px,

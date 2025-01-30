@@ -5,35 +5,72 @@ import '../styles/global.css';
 import Navigation from '../components/Navigation.astro';
 
 interface Props {
-	title?: string;
 	pageTitle?: string;
+  description?: string;
 }
 
-const { title, pageTitle } = Astro.props;
+const { 
+  pageTitle = "Antonin CLAUZIER",
+  description = "Website that hosts my blog and resume"
+} = Astro.props;
+
+// Format date for meta tags
+const buildDate = new Date().toISOString();
 ---
+<!DOCTYPE html>
 <html lang="en" class="bg-hacker-terminal">
 	<head>
     <meta charset="utf-8" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <meta name="viewport" content="width=device-width" />
-    <!-- Monaspace Fonts from CDN -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/monaspace@1.0.0/monaspace-neon.css" />
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/monaspace@1.0.0/monaspace-argon.css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content={description} />
+    <meta name="author" content="Antonin CLAUZIER" />
+    <meta name="theme-color" content="#00ff00" />
+    <meta name="robots" content="index, follow" />
+    <meta name="generator" content={Astro.generator} />
+    <meta name="color-scheme" content="dark" />
+    <meta name="format-detection" content="telephone=no" />
+    <meta name="msapplication-TileColor" content="#00ff00" />
+    <meta name="application-name" content="Antonin CLAUZIER" />
+    <meta name="apple-mobile-web-app-title" content="Antonin CLAUZIER" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    
+    <!-- Open Graph -->
+    <meta property="og:title" content={pageTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Antonin CLAUZIER" />
+    <meta property="og:url" content={Astro.url.href} />
+    <meta property="article:modified_time" content={buildDate} />
+    
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:creator" content="@0x346e3730" />
+    <meta name="twitter:title" content={pageTitle} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:url" content={Astro.url.href} />
+
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="canonical" href={Astro.url.href} />
+    <link rel="sitemap" href="/sitemap-index.xml" />
+    <link rel="manifest" href="/manifest.json" />
+    <link rel="author" href="/humans.txt" />
     <title>{pageTitle}</title>
+
     <script async defer src="https://tianji.clauzier.dev/tracker.js" data-website-id="cm28mcmud0001s8kxdabtvhei"></script>
 	</head>
   <body class="bg-hacker-terminal font-mono text-hacker-primary min-h-screen relative overflow-x-hidden antialiased">
 		<!-- Matrix rain overlay -->
-		<div class="fixed inset-0 pointer-events-none bg-matrix-rain animate-matrix opacity-30"></div>
+		<div class="fixed inset-0 pointer-events-none bg-matrix-rain animate-matrix opacity-30" aria-hidden="true"></div>
 		<!-- Scan line effect -->
-		<div class="fixed inset-0 pointer-events-none bg-gradient-to-b from-transparent via-hacker-primary to-transparent opacity-5 animate-scan-line"></div>
+		<div class="fixed inset-0 pointer-events-none bg-gradient-to-b from-transparent via-hacker-primary to-transparent opacity-5 animate-scan-line" aria-hidden="true"></div>
 
 		<div class="relative z-10 min-h-screen flex flex-col">
-			<div class="mx-auto w-full max-w-6xl px-4 sm:px-6 flex flex-col gap-12 py-8 flex-grow">
+			<div class="mx-auto w-full max-w-6xl px-2 sm:px-6 flex flex-col gap-12 py-8 flex-grow">
 				<Navigation />
         <main class="text-hacker-primary w-full flex-grow">
-          <div class="w-full bg-[rgba(0,20,0,0.3)] border border-hacker-primary p-6 font-mono shadow-glow">
-						<div id="content-container" class="relative">
+          <div class="w-full bg-[rgba(0,20,0,0.3)] border border-hacker-primary p-3 sm:p-6 font-mono shadow-glow">
+						<div id="content-container" class="relative overflow-x-auto">
 							<slot />
 						</div>
 					</div>
@@ -47,7 +84,9 @@ const { title, pageTitle } = Astro.props;
 		</div>
 		
 		<!-- Terminal cursor effect -->
-		<div class="fixed bottom-4 right-4 w-3 h-6 bg-hacker-primary animate-terminal-blink"></div>
+		<div class="fixed bottom-4 right-4 w-3 h-6 bg-hacker-primary animate-terminal-blink" aria-hidden="true"></div>
+</body>
+</html>
 
 <style is:global>
   :root {
@@ -55,59 +94,67 @@ const { title, pageTitle } = Astro.props;
     --hacker-secondary: #003300;
   }
 
-  html {
+  html, body {
     background-color: #000;
   }
 
   body {
-    background-color: #000;
-    font-family: 'Monaspace Argon', monospace;
+    font-family: 'Monaspace Neon', monospace;
     font-size: 15px;
     line-height: 1.7;
     font-feature-settings: "calt" 1, "liga" 0, "ss01" 1, "ss02" 1, "ss03" 1, "ss04" 1, "ss05" 1, "ss06" 1, "ss07" 1, "ss08" 1;
-  }
-
-  .glitch-container {
-    text-shadow: 
-      0 0 5px rgba(0, 255, 0, 0.8),
-      0 0 10px rgba(0, 255, 0, 0.4),
-      0 0 15px rgba(0, 255, 0, 0.2);
   }
 
   ::selection {
     background-color: rgba(0, 255, 0, 0.3);
     color: var(--hacker-primary);
   }
-</style>
-  </body>
-</html>
 
-<style>
-  :root {
-    background-color: #0C0C0C;
-    color: var(--hacker-primary);
-  }
-
-  html, body {
-    background-color: #0C0C0C;
-    min-height: 100vh;
-    color: var(--hacker-primary);
-  }
-
-  /* Force all text elements to use our hacker theme colors */
-  :global(h1), :global(h2), :global(h3), :global(h4), :global(h5), :global(h6) {
+  /* Typography */
+  h1, h2, h3, h4, h5, h6 {
     color: var(--hacker-primary) !important;
     font-family: 'Monaspace Neon', monospace;
     font-weight: 600;
     letter-spacing: -0.02em;
   }
 
-  :global(p), :global(li), :global(span), :global(div) {
+  p, li, span, div {
     color: var(--hacker-primary) !important;
-    font-family: 'Monaspace Argon', monospace;
+    font-family: 'Monaspace Neon', monospace;
+    letter-spacing: -0.01em;
   }
 
-  :global(a) {
+  /* Terminal elements */
+  .terminal-prompt, .command {
+    font-family: 'Monaspace Radon', monospace;
+    letter-spacing: 0;
+  }
+
+  /* Navigation and interactive elements */
+  nav a {
+    font-family: 'Monaspace Radon', monospace;
+    letter-spacing: 0.02em;
+  }
+
+  .tag, [class*="badge"] {
+    font-family: 'Monaspace Radon', monospace;
+    letter-spacing: 0.01em;
+  }
+
+  time, .metadata {
+    font-family: 'Monaspace Radon', monospace;
+    letter-spacing: 0;
+  }
+
+  /* Code blocks */
+  code, pre {
+    font-family: 'Monaspace Argon', monospace;
+    font-feature-settings: "calt" 0;
+    letter-spacing: 0;
+  }
+
+  /* Links */
+  a {
     color: var(--hacker-primary) !important;
     text-decoration: none;
     position: relative;
@@ -116,13 +163,13 @@ const { title, pageTitle } = Astro.props;
     font-weight: 500;
   }
   
-  :global(a:hover) {
+  a:hover {
     color: var(--hacker-primary) !important;
     text-shadow: 0 0 8px rgba(0, 255, 0, 0.8);
     opacity: 0.8;
   }
   
-  :global(a::before) {
+  a::before {
     content: '>';
     position: absolute;
     left: -1em;
@@ -131,10 +178,11 @@ const { title, pageTitle } = Astro.props;
     color: var(--hacker-primary) !important;
   }
   
-  :global(a:hover::before) {
+  a:hover::before {
     opacity: 1;
   }
 
+  /* Animations */
   .cursor-blink {
     animation: blink 1s step-end infinite;
   }
@@ -144,7 +192,59 @@ const { title, pageTitle } = Astro.props;
     50% { opacity: 0; }
   }
 
+  /* Effects */
   .shadow-glow {
     box-shadow: 0 0 20px rgba(0, 255, 0, 0.1);
+  }
+
+  /* Optimize animations with will-change */
+  .animate-matrix,
+  .animate-scan-line,
+  .animate-terminal-blink {
+    will-change: transform, opacity;
+  }
+
+  /* Reduce motion if user prefers */
+  @media (prefers-reduced-motion: reduce) {
+    .animate-matrix,
+    .animate-scan-line,
+    .animate-terminal-blink,
+    .animate-glitch,
+    nav::before {
+      animation: none !important;
+      transition: none !important;
+    }
+  }
+
+  /* Print styles */
+  @media print {
+    .animate-matrix,
+    .animate-scan-line,
+    .animate-terminal-blink,
+    .animate-glitch,
+    nav::before,
+    footer {
+      display: none !important;
+    }
+
+    body {
+      background: white !important;
+      color: black !important;
+    }
+
+    main {
+      max-width: 100% !important;
+      margin: 0 !important;
+      padding: 0 !important;
+    }
+
+    a {
+      text-decoration: underline !important;
+      color: black !important;
+    }
+
+    a[href^="http"]::after {
+      content: " (" attr(href) ")";
+    }
   }
 </style>

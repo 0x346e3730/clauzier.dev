@@ -1,6 +1,7 @@
 ---
 import { Icon } from 'astro-icon/components';
 import { calculateExperience } from '../utils/experience';
+import TerminalPrompt from './TerminalPrompt.astro';
 
 const birthDate = new Date('1998-05-22'); // Your birthdate
 const today = new Date();
@@ -11,20 +12,10 @@ const age = today.getFullYear() - birthDate.getFullYear() -
 const experience = calculateExperience();
 ---
 
-<div class="flex gap-2 text-lg">
-  <span class="text-hacker-primary">visitor@clauzier.dev</span>
-  <span class="text-hacker-primary">~</span>
-  <span class="text-hacker-primary">$</span>
-  <span class="text-hacker-primary">whoami</span>
-</div>
-<div class="text-base leading-relaxed whitespace-pre-wrap mb-6">Antonin CLAUZIER, {age} years old passionate Lead Dev based in Saint-Denis, La Réunion.</div>
+<TerminalPrompt command="whoami" />
+<div class="text-base leading-relaxed whitespace-pre-wrap mb-6">Antonin CLAUZIER, <span class="metadata">{age} years old</span> passionate Lead Dev based in <span class="metadata">Saint-Denis, La Réunion</span>.</div>
 
-<div class="flex gap-2 text-lg">
-  <span class="text-hacker-primary">visitor@clauzier.dev</span>
-  <span class="text-hacker-primary">~</span>
-  <span class="text-hacker-primary">$</span>
-  <span class="text-hacker-primary">cat about.md</span>
-</div>
-<div class="text-base leading-relaxed whitespace-pre-wrap">{experience.years}+ years of experience in the tech industry, especially e-commerce and healthcare.
+<TerminalPrompt command="cat about.md" />
+<div class="text-base leading-relaxed whitespace-pre-wrap"><span class="metadata">{experience.years}+ years</span> of experience in the tech industry, especially e-commerce and healthcare.
 Also co-founded and been the president of the biggest e-sports fan club in the world.
 Now offering some of my free time, knowledge and skillsets to an association that saves animals.</div>
