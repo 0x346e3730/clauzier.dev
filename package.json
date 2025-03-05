@@ -12,7 +12,7 @@
     "astro": "astro"
   },
   "dependencies": {
-    "@astrojs/node": "^9.1.1",
+    "@astrojs/node": "^9.1.2",
     "@fontsource/monaspace-argon": "^5.1.0",
     "@fontsource/monaspace-neon": "^5.1.0",
     "@fontsource/monaspace-radon": "^5.1.0",
