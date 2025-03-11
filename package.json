@@ -22,6 +22,6 @@
     "@tailwindcss/vite": "^4.0.12",
     "astro": "^5.4.2",
     "astro-icon": "^1.1.5",
-    "tailwindcss": "^4.0.12"
+    "tailwindcss": "^4.0.13"
   }
 }
