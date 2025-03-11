@@ -31,19 +31,34 @@ export interface Experience {
 export const experiences: Experience[] = [
   {
     title: "Lead Dev",
-    company: "AudioWizard",
+    company: "Drapo Solutions",
     tags: [
       { label: "Current", colorType: "primary" },
       { label: "Full-time", colorType: "secondary" }
     ],
-    startDate: { month: 6, year: 2023 },
+    startDate: { month: 3, year: 2025 },
     endDate: null,
+    location: "remote",
+    description: [
+      "Work In Progress...",
+    ]
+  },
+  {
+    title: "Lead Dev",
+    company: "AudioWizard",
+    tags: [
+      { label: "Full-time", colorType: "secondary" }
+    ],
+    startDate: { month: 6, year: 2023 },
+    endDate: { month: 3, year: 2025 },
     location: "remote",
     description: [
       "Managing a team of 6 developers, making them grow and ensuring they have the right tools and environment to be happy and productive",
       "Working hand in hand with the Product to deliver features that meets our high quality standards and brings a lot of value to our clients the most efficient way possible",
       "Managing our infrastructure and introducing security measures across all departments to make sure our clients' data are safe",
-      "Made it to 1M€ ARR !"
+      "Made it to 1M€ ARR !",
+      "Tackled various legacy issues, including one that resulted in over a 10x improvement in loading some critical parts of the applications for the bigger clients",
+      "Migrated over a quarter of a billion euros of client invoices from an old, slow model schema to a brand new, more logical one"
     ]
   },
   {

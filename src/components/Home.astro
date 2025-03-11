@@ -13,9 +13,9 @@ const experience = calculateExperience();
 ---
 
 <TerminalPrompt command="whoami" />
-<div class="text-base leading-relaxed whitespace-pre-wrap mb-6">Antonin CLAUZIER, <span class="metadata">{age} years old</span> passionate Lead Dev based in <span class="metadata">Saint-Denis, La Réunion</span>.</div>
+<div class="text-base leading-relaxed whitespace-pre-wrap mb-6">Antonin CLAUZIER, {age} years old passionate Lead Dev based in Saint-Denis, La Réunion.</div>
 
 <TerminalPrompt command="cat about.md" />
-<div class="text-base leading-relaxed whitespace-pre-wrap"><span class="metadata">{experience.years}+ years</span> of experience in the tech industry, especially e-commerce and healthcare.
-Also co-founded and been the president of the biggest e-sports fan club in the world.
-Now offering some of my free time, knowledge and skillsets to an association that saves animals.</div>
+<div class="text-base leading-relaxed whitespace-pre-wrap">{experience.years}+ years of experience in the tech industry, especially e-commerce and healthcare.
+Also co-founded and been the president of the biggest e-sports fan club in the world : <a href="https://www.lebluewall.fr/" class="text-hacker-secondary font-bold border-b-2 border-hacker-secondary hover:text-hacker-primary hover:border-hacker-primary transition-colors duration-300">Le Blue Wall</a>.
+Now offering some of my free time, knowledge and skillsets to an association that saves animals : <a href="https://www.sauvade.fr/" class="text-hacker-secondary font-bold border-b-2 border-hacker-secondary hover:text-hacker-primary hover:border-hacker-primary transition-colors duration-300">Sauvade</a></div>
