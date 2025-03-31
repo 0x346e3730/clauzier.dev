@@ -1,0 +1,97 @@
+---
+interface Props {
+  src: string;
+  alt: string;
+  caption?: string;
+}
+
+const { src, alt, caption } = Astro.props;
+---
+
+<div class="spoiler-container my-8">
+  <div class="spoiler-trigger cursor-pointer select-none">
+    <div class="spoiler-content">
+      <span class="spoiler-text">Spoiler: Click to reveal image</span>
+      <img 
+        src={src} 
+        alt={alt} 
+        class="spoiler-image hidden w-full rounded-lg"
+        loading="lazy"
+      />
+    </div>
+  </div>
+  {caption && (
+    <p class="text-center text-sm text-hacker-secondary mt-2 italic">
+      {caption}
+    </p>
+  )}
+</div>
+
+<style>
+  .spoiler-container {
+    position: relative;
+    width: 100%;
+  }
+
+  .spoiler-trigger {
+    background-color: var(--hacker-terminal);
+    border: 1px solid var(--hacker-primary);
+    border-radius: 0.5rem;
+    padding: 1rem;
+    text-align: center;
+    transition: all 0.3s ease;
+  }
+
+  .spoiler-trigger:hover {
+    background-color: rgba(0, 255, 0, 0.1);
+  }
+
+  .spoiler-text {
+    color: var(--hacker-secondary);
+    font-size: 0.875rem;
+  }
+
+  .spoiler-image {
+    opacity: 0;
+    transition: opacity 0.3s ease;
+  }
+
+  .spoiler-trigger:hover .spoiler-image,
+  .spoiler-trigger:active .spoiler-image {
+    opacity: 1;
+  }
+
+  /* Mobile optimization */
+  @media (max-width: 640px) {
+    .spoiler-trigger {
+      padding: 0.75rem;
+    }
+
+    .spoiler-text {
+      font-size: 0.75rem;
+    }
+  }
+</style>
+
+<script>
+  // Handle touch devices
+  document.querySelectorAll('.spoiler-trigger').forEach(trigger => {
+    let isRevealed = false;
+    
+    trigger.addEventListener('touchstart', (e) => {
+      e.preventDefault();
+      isRevealed = !isRevealed;
+      
+      const image = trigger.querySelector('.spoiler-image');
+      const text = trigger.querySelector('.spoiler-text');
+      
+      if (isRevealed) {
+        image?.classList.remove('hidden');
+        text?.classList.add('hidden');
+      } else {
+        image?.classList.add('hidden');
+        text?.classList.remove('hidden');
+      }
+    });
+  });
+</script> 

@@ -2,6 +2,7 @@
 import { getCollection, type CollectionEntry } from 'astro:content';
 import Layout from '../../layouts/Layout.astro';
 import TerminalPrompt from '../../components/TerminalPrompt.astro';
+import { calculateReadingTime } from '../../utils/readingTime';
 
 interface Props {
   post: CollectionEntry<'blog'>;
@@ -23,6 +24,7 @@ if (post.data.external) {
 }
 
 const { Content } = await post.render();
+const readingTime = calculateReadingTime(post.body);
 
 // Format date for meta tags
 const formattedDate = post.data.pubDate.toISOString();
@@ -51,7 +53,11 @@ const metaDescription = post.data.description || `Read ${post.data.title} by Ant
 
     <h1 class="text-2xl sm:text-3xl font-bold mb-4 break-words" itemprop="headline">{post.data.title}</h1>
     <div class="mb-8 text-sm metadata">
-      <time datetime={formattedDate} itemprop="datePublished">{readableDate}</time>
+      <div class="flex items-center gap-4">
+        <time datetime={formattedDate} itemprop="datePublished">{readableDate}</time>
+        <span>•</span>
+        <span>{readingTime} min read</span>
+      </div>
       {post.data.tags && (
         <div class="mt-2 flex flex-wrap gap-2" role="list" aria-label="Post tags">
           {post.data.tags.map((tag: string) => (
@@ -96,11 +102,49 @@ const metaDescription = post.data.description || `Read ${post.data.title} by Ant
     border: 1px solid var(--hacker-primary);
   }
 
+  /* Style spoiler images and their captions */
   :global(.prose img) {
     max-width: 100%;
     height: auto;
     border-radius: 0.25rem;
-    border: 1px solid var(--hacker-primary);
+    margin: 2rem 0 0.25rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+
+  :global(.prose img[alt^="Spoiler:"]) {
+    filter: blur(10px);
+    transition: filter 0.3s ease;
+  }
+
+  :global(.prose img[alt^="Spoiler:"]:hover),
+  :global(.prose img[alt^="Spoiler:"].revealed) {
+    filter: none;
+  }
+
+  :global(.prose img + em) {
+    display: block;
+    text-align: center;
+    font-size: 0.9rem;
+    color: #00ff00;
+    text-shadow: 0 0 8px rgba(0, 255, 0, 0.3);
+    transition: all 0.3s ease;
+    margin-top: 0;
+    margin-bottom: 2rem;
+    opacity: 1;
+    font-weight: 500;
+  }
+
+  /* Blur captions for spoiler images */
+  :global(.prose img[alt^="Spoiler:"] + em) {
+    filter: blur(10px);
+    transition: filter 0.3s ease;
+  }
+
+  /* Reveal captions when image is revealed */
+  :global(.prose img[alt^="Spoiler:"].revealed + em),
+  :global(.prose img[alt^="Spoiler:"]:hover + em) {
+    filter: none;
   }
 
   :global(.prose a:hover) {
@@ -149,4 +193,18 @@ const metaDescription = post.data.description || `Read ${post.data.title} by Ant
     background-color: rgba(0, 255, 0, 0.1);
     border-radius: 0.25rem;
   }
-</style> 
+</style>
+
+<script>
+  // Handle spoiler images and their captions
+  document.querySelectorAll('.prose img[alt^="Spoiler:"]').forEach(img => {
+    img.addEventListener('click', () => {
+      img.classList.add('revealed');
+    });
+
+    img.addEventListener('touchstart', (e) => {
+      e.preventDefault();
+      img.classList.add('revealed');
+    });
+  });
+</script> 

@@ -6,12 +6,14 @@ const blogCollection = defineCollection({
     title: z.string(),
     pubDate: z.date(),
     description: z.string().optional(),
-    author: z.string().default('Antonin Clauzier'),
+    author: z.string().default('Antonin CLAUZIER'),
     tags: z.array(z.string()).optional(),
     external: z.object({
       url: z.string().url(),
       site: z.string(),
     }).optional(),
+    draft: z.boolean().default(false),
+    lastModified: z.date().optional(),
   }),
 });
 
