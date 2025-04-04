@@ -1,9 +1,9 @@
 version: 2
 updates:
-  - package-ecosystem: "npm"
+  - package-ecosystem: "bun"
     directory: "/"
     schedule:
       interval: "daily"
     assignees:
-      - "@me"
+      - "@0x346e3730"
     versioning-strategy: auto
