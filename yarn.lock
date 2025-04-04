@@ -294,10 +294,10 @@
   dependencies:
     "@iconify/types" "*"
 
-"@iconify/json@^2.2.320":
-  version "2.2.320"
-  resolved "https://registry.npmjs.org/@iconify/json/-/json-2.2.320.tgz"
-  integrity sha512-vyqsYnejXrvY8To10DCdAdXMyh87TQNeaD8IrxnSoT/RDnZTGuUCuFs1wdMHUwDw7xMfVBUWR1+IbpTbdej4hg==
+"@iconify/json@^2.2.323":
+  version "2.2.323"
+  resolved "https://registry.yarnpkg.com/@iconify/json/-/json-2.2.323.tgz#f0a406548140c37ae09b2c21110ec5967a92860d"
+  integrity sha512-PtRN4hK9OkT2nlEa76A5QT54E6/SOukceKQkOZv9mk44UOlaS/9fhJFNUEA+FBAXEPcnnCQb2nVui+IAn7xTSw==
   dependencies:
     "@iconify/types" "*"
     pathe "^1.1.2"
