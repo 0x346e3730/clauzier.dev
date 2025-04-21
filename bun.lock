@@ -5,7 +5,7 @@
       "name": "astro-clauzier-dev",
       "dependencies": {
         "@astrojs/mdx": "^4.2.4",
-        "@astrojs/node": "^9.1.3",
+        "@astrojs/node": "^9.2.0",
         "@astrojs/rss": "^4.0.11",
         "@fontsource/monaspace-argon": "^5.2.5",
         "@fontsource/monaspace-neon": "^5.2.5",
@@ -37,7 +37,7 @@
 
     "@astrojs/mdx": ["@astrojs/mdx@4.2.4", "", { "dependencies": { "@astrojs/markdown-remark": "6.3.1", "@mdx-js/mdx": "^3.1.0", "acorn": "^8.14.1", "es-module-lexer": "^1.6.0", "estree-util-visit": "^2.0.0", "hast-util-to-html": "^9.0.5", "kleur": "^4.1.5", "rehype-raw": "^7.0.0", "remark-gfm": "^4.0.1", "remark-smartypants": "^3.0.2", "source-map": "^0.7.4", "unist-util-visit": "^5.0.0", "vfile": "^6.0.3" }, "peerDependencies": { "astro": "^5.0.0" } }, "sha512-c832AWpiMCcuPY8j+yr5T+hOf8n5RlKLFHlNTt15xxkOk3zjFJP81TIYKrMrbhD5rMzJ09Ixi+xM0m68w2Q0DQ=="],
 
-    "@astrojs/node": ["@astrojs/node@9.1.3", "", { "dependencies": { "@astrojs/internal-helpers": "0.6.1", "send": "^1.1.0", "server-destroy": "^1.0.1" }, "peerDependencies": { "astro": "^5.3.0" } }, "sha512-YcVxEmeZU8khNdrPYNPN3j//4tYPM+Pw6CthAJ6VE/bw65qEX7ErMRApalY2tibc3YhCeHMmsO9rXGhyW0NNyA=="],
+    "@astrojs/node": ["@astrojs/node@9.2.0", "", { "dependencies": { "@astrojs/internal-helpers": "0.6.1", "send": "^1.1.0", "server-destroy": "^1.0.1" }, "peerDependencies": { "astro": "^5.3.0" } }, "sha512-TUQPsMz8OtMsVc66rE7R2c2KsHgZ31sgdnazbn1bQp+9JMAYUvl9XzDPwBnrb9WkVWtEKLdyw+W8h9DzU+LQ9w=="],
 
     "@astrojs/prism": ["@astrojs/prism@3.2.0", "", { "dependencies": { "prismjs": "^1.29.0" } }, "sha512-GilTHKGCW6HMq7y3BUv9Ac7GMe/MO9gi9GW62GzKtth0SwukCu/qp2wLiGpEujhY+VVhaG9v7kv/5vFzvf4NYw=="],
 
