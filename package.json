@@ -20,7 +20,7 @@
     "@fontsource/monaspace-radon": "^5.2.5",
     "@iconify-json/la": "^1.2.1",
     "@iconify-json/ph": "^1.2.2",
-    "@iconify/json": "^2.2.329",
+    "@iconify/json": "^2.2.330",
     "@tailwindcss/vite": "^4.1.4",
     "astro": "^5.7.4",
     "astro-icon": "^1.1.5",
