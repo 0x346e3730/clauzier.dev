@@ -14,7 +14,7 @@
   "dependencies": {
     "@astrojs/mdx": "^4.3.0",
     "@astrojs/node": "^9.2.2",
-    "@astrojs/rss": "^4.0.11",
+    "@astrojs/rss": "^4.0.12",
     "@fontsource/monaspace-argon": "^5.2.5",
     "@fontsource/monaspace-neon": "^5.2.5",
     "@fontsource/monaspace-radon": "^5.2.5",
