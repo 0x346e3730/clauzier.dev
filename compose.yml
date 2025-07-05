@@ -8,7 +8,7 @@ services:
     restart: unless-stopped
     labels:
       caddy: clauzier.dev
-      caddy.reverse_proxy: "{{upstreams 4321}}"
+      caddy.reverse_proxy: "{{upstreams 80}}"
       # Cache static assets
       caddy.header: |
         Cache-Control "public, max-age=31536000" /assets/*
@@ -18,6 +18,15 @@ services:
       # Enable compression
       caddy.encode: "gzip zstd"
 
+  www_redirect:
+    image: caddy:latest
+    restart: unless-stopped
+    networks:
+      - caddy
+    labels:
+      caddy: www.clauzier.dev
+      caddy.redir: "https://clauzier.dev{uri} 301"
+
 networks:
   caddy:
-    external: true 
+    external: true

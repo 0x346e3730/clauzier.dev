@@ -8,8 +8,6 @@ import rehypeSlug from 'rehype-slug';
 import rehypeAutolinkHeadings from 'rehype-autolink-headings';
 import rehypePrettyCode from 'rehype-pretty-code';
 
-import node from "@astrojs/node";
-
 // https://astro.build/config
 export default defineConfig({
   site: 'https://clauzier.dev',
@@ -40,9 +38,8 @@ export default defineConfig({
       }),
   ],
 
-  adapter: node({
-    mode: "standalone"
-  }),
+  // Remove the Node.js adapter for static build
+  output: 'static',
 
   markdown: {
     shikiConfig: {

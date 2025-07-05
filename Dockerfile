@@ -1,4 +1,4 @@
-FROM oven/bun:latest
+FROM oven/bun:latest as builder
 WORKDIR /app
 
 COPY . .
@@ -6,7 +6,7 @@ COPY . .
 RUN bun install
 RUN bun run build
 
-ENV HOST=0.0.0.0
-ENV PORT=4321
-EXPOSE 4321
-CMD bun ./dist/server/entry.mjs
+FROM caddy:alpine
+COPY --from=builder /app/dist /usr/share/caddy
+COPY --from=builder /app/public /usr/share/caddy
+EXPOSE 80
