@@ -43,7 +43,7 @@ services:
         Vary "Accept-Encoding, Accept"
         
       # Enable advanced compression
-      caddy.encode: "gzip br zstd"
+      caddy.encode: "gzip zstd"
       
       # Enable HTTP/2 Push for critical resources
       caddy.push: |
