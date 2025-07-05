@@ -10,6 +10,6 @@ RUN bun install
 RUN bun run build
 
 FROM caddy:alpine
-COPY --from=builder /usr/bin/caddy /usr/bin/caddy
+COPY --from=caddy-builder /usr/bin/caddy /usr/bin/caddy
 COPY --from=astro-builder /app/public /usr/share/caddy
 EXPOSE 80
