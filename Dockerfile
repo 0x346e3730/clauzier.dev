@@ -7,5 +7,5 @@ RUN bun install
 RUN bun run build
 
 FROM caddy:alpine
-COPY --from=builder /app/public /usr/share/caddy
+COPY --from=builder /app/public /var/www/html
 EXPOSE 80
