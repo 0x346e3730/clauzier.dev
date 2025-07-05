@@ -1,0 +1,244 @@
+---
+import { Image, Picture } from 'astro:assets';
+import { getImageConfig, generateResponsiveSizes } from '../utils/imageOptimization';
+import type { ImageOptimizationConfig } from '../utils/imageOptimization';
+
+interface Props {
+  src: string;
+  alt: string;
+  width?: number;
+  height?: number;
+  class?: string;
+  loading?: 'lazy' | 'eager';
+  decoding?: 'async' | 'sync' | 'auto';
+  caption?: string;
+  sizes?: string;
+  quality?: number;
+  format?: 'webp' | 'avif' | 'jpeg' | 'png';
+  context?: 'hero' | 'thumbnail' | 'content' | 'avatar' | 'icon';
+  priority?: boolean;
+}
+
+const {
+  src,
+  alt,
+  width,
+  height,
+  class: className = '',
+  loading = 'lazy',
+  decoding = 'async',
+  caption,
+  sizes,
+  quality,
+  format,
+  context = 'content',
+  priority = false
+} = Astro.props;
+
+// Error handling for missing alt text
+if (!alt) {
+  throw new Error('Alt text is required for images');
+}
+
+// Get optimized configuration
+const config = getImageConfig(context, {
+  quality,
+  format,
+  sizes: sizes || generateResponsiveSizes(),
+  loading: priority ? 'eager' : loading,
+  width,
+  height,
+});
+
+// Import the image for Astro's optimization
+let optimizedSrc;
+try {
+  // For local images, use Astro's import system
+  if (src.startsWith('/')) {
+    optimizedSrc = src;
+  } else {
+    optimizedSrc = await import(src);
+  }
+} catch (error) {
+  console.warn(`Could not import image: ${src}`, error);
+  optimizedSrc = src;
+}
+---
+
+<figure class={`image-container ${className}`}>
+  <Picture
+    src={optimizedSrc}
+    alt={alt}
+    width={config.width}
+    height={config.height}
+    loading={config.loading}
+    decoding={decoding}
+    sizes={config.sizes}
+    quality={config.quality}
+    formats={['avif', 'webp', 'jpeg']}
+    class="w-full h-auto optimized-image"
+    fallbackFormat="jpeg"
+  />
+  {caption && (
+    <figcaption class="text-sm text-hacker-primary/70 mt-2 text-center font-mono">
+      {caption}
+    </figcaption>
+  )}
+</figure>
+
+<style>
+  .image-container {
+    position: relative;
+    overflow: hidden;
+    border: 1px solid var(--hacker-primary);
+    background: rgba(0, 20, 0, 0.3);
+  }
+  
+  .optimized-image {
+    transition: opacity 0.3s ease;
+  }
+  
+  .optimized-image[loading="lazy"] {
+    opacity: 0;
+  }
+  
+  .optimized-image.loaded {
+    opacity: 1;
+  }
+  
+  /* Loading state */
+  .image-container.loading::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 32px;
+    height: 32px;
+    border: 2px solid var(--hacker-primary);
+    border-top: 2px solid transparent;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+  }
+  
+  .image-container::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(0, 255, 0, 0.1), transparent);
+    transition: left 0.5s ease;
+    pointer-events: none;
+  }
+  
+  .image-container:hover::before {
+    left: 100%;
+  }
+  
+  @keyframes spin {
+    to { transform: translate(-50%, -50%) rotate(360deg); }
+  }
+  
+  /* Blur-up effect for progressive loading */
+  .optimized-image.blur-up {
+    filter: blur(10px);
+    transition: filter 0.3s ease;
+  }
+  
+  .optimized-image.blur-up.loaded {
+    filter: blur(0);
+  }
+  
+  /* Responsive aspect ratios */
+  .image-container.aspect-square {
+    aspect-ratio: 1 / 1;
+  }
+  
+  .image-container.aspect-video {
+    aspect-ratio: 16 / 9;
+  }
+  
+  .image-container.aspect-portrait {
+    aspect-ratio: 3 / 4;
+  }
+</style>
+
+<script>
+  // Enhanced lazy loading with intersection observer
+  class ImageOptimizer {
+    private observer: IntersectionObserver;
+    
+    constructor() {
+      this.observer = new IntersectionObserver(
+        this.handleIntersection.bind(this),
+        {
+          rootMargin: '50px 0px',
+          threshold: 0.1,
+        }
+      );
+      
+      this.init();
+    }
+    
+    init() {
+      // Observe all lazy images
+      document.querySelectorAll('img[loading="lazy"]').forEach(img => {
+        this.observer.observe(img);
+      });
+      
+      // Setup load event listeners
+      document.querySelectorAll('.optimized-image').forEach(img => {
+        img.addEventListener('load', this.handleImageLoad.bind(this));
+        img.addEventListener('error', this.handleImageError.bind(this));
+      });
+    }
+    
+    handleIntersection(entries: IntersectionObserverEntry[]) {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          const img = entry.target as HTMLImageElement;
+          const container = img.closest('.image-container');
+          
+          if (container) {
+            container.classList.add('loading');
+          }
+          
+          this.observer.unobserve(img);
+        }
+      });
+    }
+    
+    handleImageLoad(event: Event) {
+      const img = event.target as HTMLImageElement;
+      const container = img.closest('.image-container');
+      
+      if (container) {
+        container.classList.remove('loading');
+        img.classList.add('loaded');
+      }
+    }
+    
+    handleImageError(event: Event) {
+      const img = event.target as HTMLImageElement;
+      const container = img.closest('.image-container');
+      
+      if (container) {
+        container.classList.remove('loading');
+        container.classList.add('error');
+      }
+      
+      console.warn('Failed to load image:', img.src);
+    }
+  }
+  
+  // Initialize when DOM is ready
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', () => {
+      new ImageOptimizer();
+    });
+  } else {
+    new ImageOptimizer();
+  }
+</script>

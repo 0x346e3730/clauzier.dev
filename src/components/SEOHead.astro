@@ -1,0 +1,33 @@
+---
+import type { SEOData } from '../types/common';
+
+interface Props {
+  seo: SEOData;
+  structuredData?: object;
+}
+
+const { seo, structuredData } = Astro.props;
+---
+
+<!-- Basic SEO -->
+<title>{seo.title}</title>
+<meta name="description" content={seo.description} />
+{seo.canonical && <link rel="canonical" href={seo.canonical} />}
+
+<!-- Open Graph -->
+<meta property="og:title" content={seo.openGraph?.title || seo.title} />
+<meta property="og:description" content={seo.openGraph?.description || seo.description} />
+<meta property="og:type" content={seo.openGraph?.type || 'website'} />
+<meta property="og:url" content={Astro.url.href} />
+{seo.openGraph?.image && <meta property="og:image" content={seo.openGraph.image} />}
+
+<!-- Twitter -->
+<meta name="twitter:card" content={seo.twitter?.card || 'summary'} />
+<meta name="twitter:title" content={seo.twitter?.title || seo.title} />
+<meta name="twitter:description" content={seo.twitter?.description || seo.description} />
+{seo.twitter?.image && <meta name="twitter:image" content={seo.twitter.image} />}
+
+<!-- Structured Data -->
+{structuredData && (
+  <script type="application/ld+json" set:html={JSON.stringify(structuredData)} />
+)}

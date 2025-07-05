@@ -1,0 +1,18 @@
+/* TEAM */
+  Developer: Antonin CLAUZIER
+  Site: https://clauzier.dev
+  Twitter: @0x346e3730
+  Location: Saint-Denis, La Réunion
+
+/* SITE */
+  Language: English
+  Doctype: HTML5
+  Framework: Astro
+  Styling: Tailwind CSS
+  Fonts: Monaspace (Neon, Radon, Argon)
+  Analytics: Plausible
+
+/* THANKS */
+  Astro Team - For the amazing static site generator
+  Tailwind CSS - For the utility-first CSS framework
+  GitHub Team - For providing hosting via GitHub Pages

@@ -1,0 +1,44 @@
+---
+interface Props {
+  href?: string;
+  text?: string;
+}
+
+const { href = '#main-content', text = 'Skip to main content' } = Astro.props;
+---
+
+<a 
+  href={href}
+  class="skip-link"
+  aria-label={text}
+>
+  {text}
+</a>
+
+<style>
+  .skip-link {
+    position: absolute;
+    top: -40px;
+    left: 6px;
+    background: var(--hacker-primary);
+    color: var(--hacker-terminal);
+    padding: 8px 16px;
+    border-radius: 4px;
+    text-decoration: none;
+    font-weight: 600;
+    z-index: 1000;
+    transition: top 0.3s ease;
+    font-family: 'Monaspace Neon', monospace;
+  }
+  
+  .skip-link:focus {
+    top: 6px;
+  }
+  
+  .skip-link:hover,
+  .skip-link:focus {
+    background: var(--hacker-secondary);
+    outline: 2px solid var(--hacker-primary);
+    outline-offset: 2px;
+  }
+</style>

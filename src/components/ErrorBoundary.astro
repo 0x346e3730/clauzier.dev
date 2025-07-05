@@ -1,0 +1,42 @@
+---
+import { handleError } from '../utils/errors';
+
+interface Props {
+  fallback?: string;
+  context?: string;
+}
+
+const { fallback = 'Something went wrong', context = 'Component' } = Astro.props;
+
+// This component serves as a template for error handling
+// In practice, error handling in Astro is done through try-catch blocks
+---
+
+<div class="error-boundary border border-red-500 bg-red-900/20 p-4 rounded">
+  <div class="text-red-400 font-mono text-sm">
+    <div class="flex items-center gap-2 mb-2">
+      <span class="text-red-500">⚠</span>
+      <span class="font-semibold">Error</span>
+    </div>
+    <p>{fallback}</p>
+    <details class="mt-2">
+      <summary class="cursor-pointer text-red-300 hover:text-red-100">
+        Details
+      </summary>
+      <div class="mt-2 text-xs text-red-300/70">
+        Context: {context}
+      </div>
+    </details>
+  </div>
+</div>
+
+<style>
+  .error-boundary {
+    animation: fadeIn 0.3s ease-in-out;
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+</style>

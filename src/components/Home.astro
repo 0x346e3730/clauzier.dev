@@ -2,20 +2,32 @@
 import { Icon } from 'astro-icon/components';
 import { calculateExperience } from '../utils/experience';
 import TerminalPrompt from './TerminalPrompt.astro';
+import { PERSONAL_INFO, calculateAge } from '../constants/site';
 
-const birthDate = new Date('1998-05-22'); // Your birthdate
-const today = new Date();
-const age = today.getFullYear() - birthDate.getFullYear() - 
-    (today.getMonth() < birthDate.getMonth() || 
-    (today.getMonth() === birthDate.getMonth() && today.getDate() < birthDate.getDate()) ? 1 : 0);
-
+const age = calculateAge(PERSONAL_INFO.BIRTH_DATE);
 const experience = calculateExperience();
 ---
 
 <TerminalPrompt command="whoami" />
-<div class="text-base leading-relaxed whitespace-pre-wrap mb-6">Antonin CLAUZIER, {age} years old passionate Lead Dev based in Saint-Denis, La Réunion.</div>
+<div class="text-base leading-relaxed whitespace-pre-wrap mb-6">
+  {PERSONAL_INFO.PROFESSION}, {age} years old passionate developer based in {PERSONAL_INFO.LOCATION}.
+</div>
 
 <TerminalPrompt command="cat about.md" />
-<div class="text-base leading-relaxed whitespace-pre-wrap">{experience.years}+ years of experience in the tech industry, especially e-commerce and healthcare.
-Also co-founded and been the president of the biggest e-sports fan club in the world : <a href="https://www.lebluewall.fr/" class="text-hacker-secondary font-bold border-b-2 border-hacker-secondary hover:text-hacker-primary hover:border-hacker-primary transition-colors duration-300">Le Blue Wall</a>.
-Now offering some of my free time, knowledge and skillsets to an association that saves animals : <a href="https://www.sauvade.fr/" class="text-hacker-secondary font-bold border-b-2 border-hacker-secondary hover:text-hacker-primary hover:border-hacker-primary transition-colors duration-300">Sauvade</a></div>
+<div class="text-base leading-relaxed whitespace-pre-wrap">
+  {experience.years}+ years of experience in the tech industry, especially e-commerce and healthcare.
+  Also co-founded and been the president of the biggest e-sports fan club in the world : 
+  <a href={PERSONAL_INFO.ORGANIZATIONS.BLUE_WALL.url} 
+     class="text-hacker-secondary font-bold border-b-2 border-hacker-secondary hover:text-hacker-primary hover:border-hacker-primary transition-colors duration-300"
+     target="_blank"
+     rel="noopener noreferrer">
+    {PERSONAL_INFO.ORGANIZATIONS.BLUE_WALL.name}
+  </a>.
+  Now offering some of my free time, knowledge and skillsets to an association that saves animals : 
+  <a href={PERSONAL_INFO.ORGANIZATIONS.SAUVADE.url} 
+     class="text-hacker-secondary font-bold border-b-2 border-hacker-secondary hover:text-hacker-primary hover:border-hacker-primary transition-colors duration-300"
+     target="_blank"
+     rel="noopener noreferrer">
+    {PERSONAL_INFO.ORGANIZATIONS.SAUVADE.name}
+  </a>
+</div>

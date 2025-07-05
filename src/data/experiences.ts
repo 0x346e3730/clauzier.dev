@@ -1,35 +1,8 @@
-export type ColorType = 'primary' | 'secondary' | 'tertiary';
-export type LocationType = 'remote' | 'on-site';
-
-export interface Tag {
-  label: string;
-  colorType: ColorType;
-}
-
-export interface DateInfo {
-  month: number; // 1-12
-  year: number;
-}
-
-export interface Testimonial {
-  quote: string;
-  author: string;
-  title: string;
-}
-
-export interface Experience {
-  title: string;
-  company: string;
-  tags: Tag[];
-  startDate: DateInfo;
-  endDate: DateInfo | null;
-  location: LocationType;
-  description: string[];
-  testimonial?: Testimonial;
-}
+import type { Experience } from '../types/experience';
 
 export const experiences: Experience[] = [
   {
+    id: "drapo-lead-dev",
     title: "Lead Dev",
     company: "Drapo Solutions",
     tags: [
@@ -44,6 +17,7 @@ export const experiences: Experience[] = [
     ]
   },
   {
+    id: "audiowizard-lead-dev",
     title: "Lead Dev",
     company: "AudioWizard",
     tags: [

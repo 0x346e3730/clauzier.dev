@@ -1,0 +1,188 @@
+---
+// Service Worker registration and management
+---
+
+<script>
+  // Register service worker
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', async () => {
+      try {
+        const registration = await navigator.serviceWorker.register('/sw.js');
+        console.log('[SW] Registration successful:', registration.scope);
+        
+        // Handle updates
+        registration.addEventListener('updatefound', () => {
+          const newWorker = registration.installing;
+          if (newWorker) {
+            newWorker.addEventListener('statechange', () => {
+              if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
+                // Show update available notification
+                showUpdateNotification();
+              }
+            });
+          }
+        });
+        
+        // Listen for service worker messages
+        navigator.serviceWorker.addEventListener('message', event => {
+          if (event.data && event.data.type === 'CACHE_UPDATED') {
+            console.log('[SW] Cache updated for:', event.data.url);
+          }
+        });
+        
+        // Force update check
+        if (registration.waiting) {
+          showUpdateNotification();
+        }
+        
+      } catch (error) {
+        console.error('[SW] Registration failed:', error);
+      }
+    });
+  }
+  
+  function showUpdateNotification() {
+    // Create update notification
+    const notification = document.createElement('div');
+    notification.style.cssText = `
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      background: var(--hacker-dark);
+      border: 2px solid var(--hacker-primary);
+      color: var(--hacker-primary);
+      padding: 1rem;
+      z-index: 10000;
+      font-family: monospace;
+      max-width: 300px;
+      box-shadow: 0 0 20px rgba(0, 255, 0, 0.3);
+    `;
+    
+    notification.innerHTML = `
+      <div style="margin-bottom: 0.5rem;">🔄 Site Update Available</div>
+      <div style="margin-bottom: 1rem; font-size: 0.9rem; opacity: 0.8;">
+        A new version of the site is ready.
+      </div>
+      <button onclick="updateSite()" style="
+        background: transparent;
+        border: 1px solid var(--hacker-primary);
+        color: var(--hacker-primary);
+        padding: 0.5rem 1rem;
+        cursor: pointer;
+        margin-right: 0.5rem;
+        font-family: inherit;
+      ">
+        Update
+      </button>
+      <button onclick="this.parentElement.remove()" style="
+        background: transparent;
+        border: 1px solid var(--hacker-primary);
+        color: var(--hacker-primary);
+        padding: 0.5rem 1rem;
+        cursor: pointer;
+        font-family: inherit;
+      ">
+        Later
+      </button>
+    `;
+    
+    document.body.appendChild(notification);
+  }
+  
+  window.updateSite = function() {
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.ready.then(registration => {
+        if (registration.waiting) {
+          registration.waiting.postMessage({ type: 'SKIP_WAITING' });
+          window.location.reload();
+        }
+      });
+    }
+  };
+  
+  // Handle offline/online status
+  function updateNetworkStatus() {
+    const isOnline = navigator.onLine;
+    document.body.classList.toggle('offline', !isOnline);
+    
+    // Show/hide offline indicator
+    let indicator = document.getElementById('network-indicator');
+    if (!isOnline && !indicator) {
+      indicator = document.createElement('div');
+      indicator.id = 'network-indicator';
+      indicator.style.cssText = `
+        position: fixed;
+        bottom: 20px;
+        left: 20px;
+        background: rgba(255, 0, 0, 0.9);
+        color: white;
+        padding: 0.5rem 1rem;
+        border-radius: 4px;
+        font-family: monospace;
+        z-index: 10000;
+        font-size: 0.9rem;
+      `;
+      indicator.textContent = '⚠ Offline Mode';
+      document.body.appendChild(indicator);
+    } else if (isOnline && indicator) {
+      indicator.remove();
+    }
+  }
+  
+  window.addEventListener('online', updateNetworkStatus);
+  window.addEventListener('offline', updateNetworkStatus);
+  
+  // Initial status check
+  updateNetworkStatus();
+  
+  // Preload critical pages on interaction
+  const preloadPages = ['/blog/', '/resume/'];
+  let preloadTriggered = false;
+  
+  function preloadCriticalPages() {
+    if (preloadTriggered) return;
+    preloadTriggered = true;
+    
+    preloadPages.forEach(url => {
+      const link = document.createElement('link');
+      link.rel = 'prefetch';
+      link.href = url;
+      document.head.appendChild(link);
+    });
+  }
+  
+  // Trigger preload on first user interaction
+  ['mousedown', 'touchstart', 'keydown'].forEach(event => {
+    document.addEventListener(event, preloadCriticalPages, { once: true, passive: true });
+  });
+</script>
+
+<style>
+  /* Offline mode styling */
+  body.offline {
+    filter: grayscale(0.3);
+  }
+  
+  body.offline::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: repeating-linear-gradient(
+      90deg,
+      #ff6b6b 0px,
+      #ff6b6b 10px,
+      transparent 10px,
+      transparent 20px
+    );
+    z-index: 10000;
+    animation: offline-stripe 1s linear infinite;
+  }
+  
+  @keyframes offline-stripe {
+    0% { transform: translateX(-20px); }
+    100% { transform: translateX(0); }
+  }
+</style>

@@ -1,0 +1,23 @@
+{
+  "name": "Antonin CLAUZIER - Personal Website",
+  "short_name": "Antonin CLAUZIER",
+  "description": "Personal blog and portfolio of Antonin CLAUZIER - Software Engineer",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#000000",
+  "theme_color": "#00ff00",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ],
+  "categories": ["technology", "developer", "blog", "portfolio"],
+  "lang": "en",
+  "scope": "/",
+  "related_applications": [],
+  "prefer_related_applications": false
+}

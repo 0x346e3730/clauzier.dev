@@ -1,0 +1,36 @@
+---
+import { sanitizeUrl, addSecurityAttributes } from '../utils/sanitize';
+
+interface Props {
+  href: string;
+  class?: string;
+  'aria-label'?: string;
+  title?: string;
+}
+
+const { href, class: className = '', 'aria-label': ariaLabel, title, ...rest } = Astro.props;
+
+// Sanitize URL and add security attributes
+const safeHref = sanitizeUrl(href);
+const securityAttrs = addSecurityAttributes(safeHref);
+
+// If the URL couldn't be sanitized, don't render a link
+const isValidUrl = safeHref !== '#';
+---
+
+{isValidUrl ? (
+  <a 
+    href={safeHref}
+    class={className}
+    aria-label={ariaLabel}
+    title={title}
+    {...securityAttrs}
+    {...rest}
+  >
+    <slot />
+  </a>
+) : (
+  <span class={`${className} cursor-not-allowed opacity-50`} title="Invalid or unsafe link">
+    <slot />
+  </span>
+)}

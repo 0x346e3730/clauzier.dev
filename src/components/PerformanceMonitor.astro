@@ -1,0 +1,473 @@
+---
+// Performance monitoring component
+---
+
+<script>
+  import { performanceMonitor } from '../utils/performanceMonitoring';
+
+  class PerformanceDashboard {
+    private isVisible: boolean = false;
+    private container: HTMLElement | null = null;
+    private updateInterval: number = 0;
+    
+    constructor() {
+      this.init();
+    }
+    
+    private init(): void {
+      // Only show in development or with debug flag
+      const isDev = import.meta.env.DEV;
+      const hasDebugFlag = new URLSearchParams(window.location.search).has('debug');
+      
+      if (isDev || hasDebugFlag) {
+        this.createDashboard();
+        this.setupKeyboardShortcut();
+        this.startMonitoring();
+      }
+    }
+    
+    private createDashboard(): void {
+      this.container = document.createElement('div');
+      this.container.id = 'performance-dashboard';
+      this.container.innerHTML = `
+        <div class="dashboard-header">
+          <h3>Performance Monitor</h3>
+          <button class="close-btn" aria-label="Close">×</button>
+        </div>
+        <div class="dashboard-content">
+          <div class="metrics-grid">
+            <div class="metric-card">
+              <div class="metric-label">LCP</div>
+              <div class="metric-value" data-metric="lcp">-</div>
+              <div class="metric-rating" data-rating="lcp"></div>
+            </div>
+            <div class="metric-card">
+              <div class="metric-label">FID</div>
+              <div class="metric-value" data-metric="fid">-</div>
+              <div class="metric-rating" data-rating="fid"></div>
+            </div>
+            <div class="metric-card">
+              <div class="metric-label">CLS</div>
+              <div class="metric-value" data-metric="cls">-</div>
+              <div class="metric-rating" data-rating="cls"></div>
+            </div>
+            <div class="metric-card">
+              <div class="metric-label">FCP</div>
+              <div class="metric-value" data-metric="fcp">-</div>
+              <div class="metric-rating" data-rating="fcp"></div>
+            </div>
+            <div class="metric-card">
+              <div class="metric-label">TTFB</div>
+              <div class="metric-value" data-metric="ttfb">-</div>
+              <div class="metric-rating" data-rating="ttfb"></div>
+            </div>
+            <div class="metric-card">
+              <div class="metric-label">Cache Hit Rate</div>
+              <div class="metric-value" data-metric="cacheHitRate">-</div>
+            </div>
+          </div>
+          <div class="dashboard-actions">
+            <button class="action-btn" id="copy-report">Copy Report</button>
+            <button class="action-btn" id="clear-metrics">Clear</button>
+          </div>
+        </div>
+      `;
+      
+      this.addDashboardStyles();
+      document.body.appendChild(this.container);
+      
+      // Setup event listeners
+      this.container.querySelector('.close-btn')?.addEventListener('click', () => {
+        this.hide();
+      });
+      
+      this.container.querySelector('#copy-report')?.addEventListener('click', () => {
+        this.copyReport();
+      });
+      
+      this.container.querySelector('#clear-metrics')?.addEventListener('click', () => {
+        this.clearMetrics();
+      });
+      
+      this.hide(); // Start hidden
+    }
+    
+    private addDashboardStyles(): void {
+      if (document.querySelector('#performance-dashboard-styles')) return;
+      
+      const styles = document.createElement('style');
+      styles.id = 'performance-dashboard-styles';
+      styles.textContent = `
+        #performance-dashboard {
+          position: fixed;
+          top: 20px;
+          right: 20px;
+          width: 320px;
+          background: rgba(0, 12, 0, 0.95);
+          border: 2px solid var(--hacker-primary);
+          border-radius: 8px;
+          font-family: 'Monaspace Neon', monospace;
+          font-size: 12px;
+          z-index: 10000;
+          backdrop-filter: blur(10px);
+          transform: translateX(100%);
+          transition: transform 0.3s ease;
+        }
+        
+        #performance-dashboard.visible {
+          transform: translateX(0);
+        }
+        
+        .dashboard-header {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          padding: 12px 16px;
+          border-bottom: 1px solid var(--hacker-primary);
+          background: rgba(0, 255, 0, 0.1);
+        }
+        
+        .dashboard-header h3 {
+          margin: 0;
+          color: var(--hacker-primary);
+          font-size: 14px;
+          font-weight: 600;
+        }
+        
+        .close-btn {
+          background: none;
+          border: none;
+          color: var(--hacker-primary);
+          font-size: 18px;
+          cursor: pointer;
+          padding: 0;
+          width: 24px;
+          height: 24px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+        }
+        
+        .close-btn:hover {
+          background: rgba(0, 255, 0, 0.2);
+          border-radius: 4px;
+        }
+        
+        .dashboard-content {
+          padding: 16px;
+        }
+        
+        .metrics-grid {
+          display: grid;
+          grid-template-columns: repeat(2, 1fr);
+          gap: 12px;
+          margin-bottom: 16px;
+        }
+        
+        .metric-card {
+          background: rgba(0, 255, 0, 0.05);
+          border: 1px solid rgba(0, 255, 0, 0.3);
+          border-radius: 4px;
+          padding: 8px;
+          text-align: center;
+        }
+        
+        .metric-label {
+          color: rgba(0, 255, 0, 0.8);
+          font-size: 10px;
+          margin-bottom: 4px;
+          text-transform: uppercase;
+          letter-spacing: 0.5px;
+        }
+        
+        .metric-value {
+          color: var(--hacker-primary);
+          font-size: 16px;
+          font-weight: 600;
+          margin-bottom: 2px;
+        }
+        
+        .metric-rating {
+          font-size: 8px;
+          text-transform: uppercase;
+          letter-spacing: 0.5px;
+        }
+        
+        .metric-rating.good { color: #00ff00; }
+        .metric-rating.needs-improvement { color: #ffaa00; }
+        .metric-rating.poor { color: #ff4444; }
+        
+        .dashboard-actions {
+          display: flex;
+          gap: 8px;
+        }
+        
+        .action-btn {
+          flex: 1;
+          background: transparent;
+          border: 1px solid var(--hacker-primary);
+          color: var(--hacker-primary);
+          padding: 8px 12px;
+          font-family: inherit;
+          font-size: 10px;
+          cursor: pointer;
+          border-radius: 4px;
+          text-transform: uppercase;
+          letter-spacing: 0.5px;
+          transition: all 0.2s ease;
+        }
+        
+        .action-btn:hover {
+          background: rgba(0, 255, 0, 0.1);
+          box-shadow: 0 0 8px rgba(0, 255, 0, 0.3);
+        }
+        
+        .performance-indicator {
+          position: fixed;
+          bottom: 20px;
+          right: 20px;
+          width: 40px;
+          height: 40px;
+          background: rgba(0, 12, 0, 0.9);
+          border: 2px solid var(--hacker-primary);
+          border-radius: 50%;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          cursor: pointer;
+          font-family: 'Monaspace Neon', monospace;
+          font-size: 12px;
+          font-weight: 600;
+          color: var(--hacker-primary);
+          z-index: 9999;
+          transition: all 0.3s ease;
+        }
+        
+        .performance-indicator:hover {
+          transform: scale(1.1);
+          box-shadow: 0 0 20px rgba(0, 255, 0, 0.5);
+        }
+        
+        .performance-indicator.good { border-color: #00ff00; color: #00ff00; }
+        .performance-indicator.needs-improvement { border-color: #ffaa00; color: #ffaa00; }
+        .performance-indicator.poor { border-color: #ff4444; color: #ff4444; }
+      `;
+      
+      document.head.appendChild(styles);
+    }
+    
+    private setupKeyboardShortcut(): void {
+      document.addEventListener('keydown', (e) => {
+        if (e.ctrlKey && e.shiftKey && e.key === 'P') {
+          e.preventDefault();
+          this.toggle();
+        }
+      });
+    }
+    
+    private startMonitoring(): void {
+      this.updateDashboard();
+      this.updateInterval = window.setInterval(() => {
+        this.updateDashboard();
+      }, 1000);
+      
+      this.createPerformanceIndicator();
+    }
+    
+    private updateDashboard(): void {
+      if (!this.container) return;
+      
+      const metrics = performanceMonitor.getMetrics();
+      
+      // Update metric values and ratings
+      Object.entries(metrics).forEach(([key, value]) => {
+        const valueElement = this.container?.querySelector(`[data-metric="${key}"]`);
+        const ratingElement = this.container?.querySelector(`[data-rating="${key}"]`);
+        
+        if (valueElement && value !== undefined) {
+          if (key === 'cls') {
+            valueElement.textContent = value.toFixed(3);
+          } else if (key === 'cacheHitRate') {
+            valueElement.textContent = `${Math.round(value * 100)}%`;
+          } else if (typeof value === 'number') {
+            valueElement.textContent = `${Math.round(value)}ms`;
+          } else {
+            valueElement.textContent = String(value);
+          }
+        }
+        
+        if (ratingElement) {
+          const rating = this.getRating(key, value as number);
+          ratingElement.textContent = rating;
+          ratingElement.className = `metric-rating ${rating}`;
+        }
+      });
+    }
+    
+    private createPerformanceIndicator(): void {
+      const indicator = document.createElement('div');
+      indicator.className = 'performance-indicator';
+      indicator.title = 'Click to view performance dashboard (Ctrl+Shift+P)';
+      indicator.textContent = 'P';
+      
+      indicator.addEventListener('click', () => {
+        this.toggle();
+      });
+      
+      document.body.appendChild(indicator);
+      
+      // Update indicator color based on overall performance
+      setInterval(() => {
+        const metrics = performanceMonitor.getMetrics();
+        const overallRating = this.calculateOverallRating(metrics);
+        indicator.className = `performance-indicator ${overallRating}`;
+      }, 2000);
+    }
+    
+    private calculateOverallRating(metrics: any): string {
+      const ratings = [];
+      
+      if (metrics.lcp) ratings.push(this.getRating('lcp', metrics.lcp));
+      if (metrics.fid) ratings.push(this.getRating('fid', metrics.fid));
+      if (metrics.cls) ratings.push(this.getRating('cls', metrics.cls));
+      
+      if (ratings.includes('poor')) return 'poor';
+      if (ratings.includes('needs-improvement')) return 'needs-improvement';
+      return 'good';
+    }
+    
+    private getRating(metric: string, value: number): string {
+      const thresholds: any = {
+        lcp: { good: 2500, needsImprovement: 4000 },
+        fid: { good: 100, needsImprovement: 300 },
+        cls: { good: 0.1, needsImprovement: 0.25 },
+        fcp: { good: 1800, needsImprovement: 3000 },
+        ttfb: { good: 800, needsImprovement: 1800 },
+      };
+      
+      const threshold = thresholds[metric];
+      if (!threshold) return '';
+      
+      if (value <= threshold.good) return 'good';
+      if (value <= threshold.needsImprovement) return 'needs-improvement';
+      return 'poor';
+    }
+    
+    private show(): void {
+      if (this.container) {
+        this.isVisible = true;
+        this.container.classList.add('visible');
+      }
+    }
+    
+    private hide(): void {
+      if (this.container) {
+        this.isVisible = false;
+        this.container.classList.remove('visible');
+      }
+    }
+    
+    private toggle(): void {
+      if (this.isVisible) {
+        this.hide();
+      } else {
+        this.show();
+      }
+    }
+    
+    private copyReport(): void {
+      const report = performanceMonitor.generateReport();
+      
+      if (navigator.clipboard) {
+        navigator.clipboard.writeText(report).then(() => {
+          this.showNotification('Performance report copied to clipboard!');
+        });
+      } else {
+        // Fallback for older browsers
+        const textarea = document.createElement('textarea');
+        textarea.value = report;
+        document.body.appendChild(textarea);
+        textarea.select();
+        document.execCommand('copy');
+        document.body.removeChild(textarea);
+        this.showNotification('Performance report copied to clipboard!');
+      }
+    }
+    
+    private clearMetrics(): void {
+      // This would clear metrics if the monitoring system supported it
+      this.showNotification('Metrics cleared! Refresh page to restart monitoring.');
+    }
+    
+    private showNotification(message: string): void {
+      const notification = document.createElement('div');
+      notification.style.cssText = `
+        position: fixed;
+        top: 20px;
+        left: 50%;
+        transform: translateX(-50%);
+        background: rgba(0, 255, 0, 0.9);
+        color: #000;
+        padding: 12px 20px;
+        border-radius: 4px;
+        font-family: 'Monaspace Neon', monospace;
+        font-size: 12px;
+        z-index: 10001;
+        animation: slideDown 0.3s ease;
+      `;
+      notification.textContent = message;
+      
+      document.body.appendChild(notification);
+      
+      setTimeout(() => {
+        notification.style.animation = 'slideUp 0.3s ease';
+        setTimeout(() => {
+          document.body.removeChild(notification);
+        }, 300);
+      }, 2000);
+    }
+    
+    destroy(): void {
+      if (this.updateInterval) {
+        clearInterval(this.updateInterval);
+      }
+      
+      if (this.container) {
+        document.body.removeChild(this.container);
+      }
+      
+      performanceMonitor.destroy();
+    }
+  }
+  
+  // Initialize performance dashboard
+  let dashboard: PerformanceDashboard;
+  
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', () => {
+      dashboard = new PerformanceDashboard();
+    });
+  } else {
+    dashboard = new PerformanceDashboard();
+  }
+  
+  // Cleanup on page unload
+  window.addEventListener('beforeunload', () => {
+    dashboard?.destroy();
+  });
+  
+  // Add CSS animations
+  const animationStyles = document.createElement('style');
+  animationStyles.textContent = `
+    @keyframes slideDown {
+      from { transform: translateX(-50%) translateY(-100%); opacity: 0; }
+      to { transform: translateX(-50%) translateY(0); opacity: 1; }
+    }
+    
+    @keyframes slideUp {
+      from { transform: translateX(-50%) translateY(0); opacity: 1; }
+      to { transform: translateX(-50%) translateY(-100%); opacity: 0; }
+    }
+  `;
+  document.head.appendChild(animationStyles);
+</script>

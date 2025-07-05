@@ -9,7 +9,15 @@
     "dev": "astro dev",
     "build": "astro build",
     "preview": "astro preview",
-    "astro": "astro"
+    "astro": "astro",
+    "lint": "eslint src --ext .ts,.astro",
+    "lint:fix": "eslint src --ext .ts,.astro --fix",
+    "format": "prettier --write \"src/**/*.{ts,astro,css,md}\"",
+    "format:check": "prettier --check \"src/**/*.{ts,astro,css,md}\"",
+    "test": "vitest",
+    "test:coverage": "vitest run --coverage",
+    "test:ui": "vitest --ui",
+    "typecheck": "astro check"
   },
   "dependencies": {
     "@astrojs/mdx": "^4.3.0",

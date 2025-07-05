@@ -9,14 +9,46 @@ services:
     labels:
       caddy: clauzier.dev
       caddy.reverse_proxy: "{{upstreams 80}}"
-      # Cache static assets
+      # Advanced caching and compression
       caddy.header: |
-        Cache-Control "public, max-age=31536000" /assets/*
-        Cache-Control "public, max-age=31536000" /*.{jpg,jpeg,png,gif,ico,svg,webp}
-        Cache-Control "public, max-age=31536000" /*.{css,js}
-        Cache-Control "public, max-age=3600" /
-      # Enable compression
-      caddy.encode: "gzip zstd"
+        # Static assets with content hashing - Long cache
+        Cache-Control "public, max-age=31536000, immutable" /_astro/*
+        
+        # Images - Long cache
+        Cache-Control "public, max-age=31536000, immutable" /*.{jpg,jpeg,png,gif,ico,svg,webp,avif}
+        Cache-Control "public, max-age=31536000, immutable" /images/*
+        
+        # Fonts - Very long cache with CORS
+        Cache-Control "public, max-age=31536000, immutable" /*.{woff2,woff,ttf,eot}
+        Access-Control-Allow-Origin "*" /*.{woff2,woff,ttf,eot}
+        
+        # CSS/JS - Long cache
+        Cache-Control "public, max-age=31536000, immutable" /*.{css,js}
+        
+        # HTML pages - Short cache with revalidation
+        Cache-Control "public, max-age=300, s-maxage=3600, stale-while-revalidate=86400" /*.html
+        Cache-Control "public, max-age=300, s-maxage=3600, stale-while-revalidate=86400" /
+        
+        # Dynamic content
+        Cache-Control "public, max-age=3600, s-maxage=7200, stale-while-revalidate=86400" /rss.xml
+        Cache-Control "public, max-age=3600, s-maxage=7200, stale-while-revalidate=86400" /sitemap*.xml
+        
+        # Service Worker - No cache
+        Cache-Control "no-cache, no-store, must-revalidate" /sw.js
+        
+        # Add ETag for all resources
+        ETag "strong"
+        
+        # Vary header for compression
+        Vary "Accept-Encoding, Accept"
+        
+      # Enable advanced compression
+      caddy.encode: "gzip br zstd"
+      
+      # Enable HTTP/2 Push for critical resources
+      caddy.push: |
+        /*.html /_astro/*.css
+        /*.html /_astro/*.js
 
   www_redirect:
     image: caddy:latest

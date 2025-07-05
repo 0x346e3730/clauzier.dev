@@ -1,18 +1,45 @@
 ---
-// import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
-import '../styles/global.css';
 import Navigation from '../components/Navigation.astro';
+import SEOHead from '../components/SEOHead.astro';
+import ServiceWorkerManager from '../components/ServiceWorkerManager.astro';
+import CriticalResourceHints from '../components/CriticalResourceHints.astro';
+import BundleOptimizer from '../components/BundleOptimizer.astro';
+import PerformanceMonitor from '../components/PerformanceMonitor.astro';
+import '../styles/global.css';
+import { generateSEO, generateStructuredData } from '../utils/seo';
+import { SITE_CONFIG } from '../constants/site';
+import type { SEOData } from '../types/common';
 
 interface Props {
 	pageTitle?: string;
   description?: string;
+  seo?: Partial<SEOData>;
+  structuredData?: object;
 }
 
 const { 
-  pageTitle = "Antonin CLAUZIER",
-  description = "Website that hosts my blog and resume"
+  pageTitle = SITE_CONFIG.title,
+  description = SITE_CONFIG.description,
+  seo = {},
+  structuredData
 } = Astro.props;
+
+// Generate SEO data
+const seoData = generateSEO({
+  title: pageTitle,
+  description,
+  canonical: Astro.url.href,
+  ...seo,
+});
+
+// Generate website structured data if none provided
+const websiteStructuredData = structuredData || generateStructuredData('website', {
+  name: SITE_CONFIG.title,
+  description: SITE_CONFIG.description,
+  url: Astro.url.href,
+  author: SITE_CONFIG.author,
+});
 
 // Format date for meta tags
 const buildDate = new Date().toISOString();
@@ -22,47 +49,50 @@ const buildDate = new Date().toISOString();
 	<head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="description" content={description} />
-    <meta name="author" content="Antonin CLAUZIER" />
+    <meta name="author" content={SITE_CONFIG.author} />
     <meta name="theme-color" content="#00ff00" />
     <meta name="robots" content="index, follow" />
     <meta name="generator" content={Astro.generator} />
     <meta name="color-scheme" content="dark" />
     <meta name="format-detection" content="telephone=no" />
     <meta name="msapplication-TileColor" content="#00ff00" />
-    <meta name="application-name" content="Antonin CLAUZIER" />
-    <meta name="apple-mobile-web-app-title" content="Antonin CLAUZIER" />
+    <meta name="application-name" content={SITE_CONFIG.title} />
+    <meta name="apple-mobile-web-app-title" content={SITE_CONFIG.title} />
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
-    
-    <!-- Open Graph -->
-    <meta property="og:title" content={pageTitle} />
-    <meta property="og:description" content={description} />
-    <meta property="og:type" content="website" />
-    <meta property="og:site_name" content="Antonin CLAUZIER" />
-    <meta property="og:url" content={Astro.url.href} />
     <meta property="article:modified_time" content={buildDate} />
     
-    <!-- Twitter -->
-    <meta name="twitter:card" content="summary" />
-    <meta name="twitter:creator" content="@0x346e3730" />
-    <meta name="twitter:title" content={pageTitle} />
-    <meta name="twitter:description" content={description} />
-    <meta name="twitter:url" content={Astro.url.href} />
+    <!-- SEO and Structured Data -->
+    <SEOHead seo={seoData} structuredData={websiteStructuredData} />
 
+    <!-- Critical Resource Hints -->
+    <CriticalResourceHints page={Astro.url.pathname.includes('/blog/') ? 'blog' : Astro.url.pathname.includes('/resume') ? 'resume' : 'home'} />
+    
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="canonical" href={Astro.url.href} />
     <link rel="sitemap" href="/sitemap-index.xml" />
     <link rel="manifest" href="/manifest.json" />
     <link rel="author" href="/humans.txt" />
-    <link rel="alternate" type="application/rss+xml" title="Antonin CLAUZIER - Blog RSS Feed" href="/rss.xml" />
-    <title>{pageTitle}</title>
+    <link rel="alternate" type="application/rss+xml" title={`${SITE_CONFIG.title} - Blog RSS Feed`} href="/rss.xml" />
 
-    <script defer data-domain="clauzier.dev" src="https://plausible.clauzier.dev/js/script.file-downloads.hash.outbound-links.pageview-props.tagged-events.js"></script>
-    <script>window.plausible = window.plausible || function() { (window.plausible.q = window.plausible.q || []).push(arguments) }</script>
+    {SITE_CONFIG.analytics.plausible && (
+      <>
+        <script defer data-domain={SITE_CONFIG.analytics.plausible.domain} src={SITE_CONFIG.analytics.plausible.src}></script>
+        <script>window.plausible = window.plausible || function() { (window.plausible.q = window.plausible.q || []).push(arguments) }</script>
+      </>
+    )}
+    
+    <!-- Performance Optimization Components -->
+    <ServiceWorkerManager />
+    <BundleOptimizer />
+    <PerformanceMonitor />
 
 	</head>
   <body class="bg-hacker-terminal font-mono text-hacker-primary min-h-screen relative overflow-x-hidden antialiased">
+		<!-- Skip navigation link for accessibility -->
+		<a href="#main-content" class="skip-link sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-50 focus:bg-hacker-primary focus:text-hacker-terminal focus:px-4 focus:py-2 focus:rounded">
+			Skip to main content
+		</a>
 		<!-- Matrix rain overlay -->
 		<div class="fixed inset-0 pointer-events-none bg-matrix-rain animate-matrix opacity-30" aria-hidden="true"></div>
 		<!-- Scan line effect -->
@@ -71,7 +101,7 @@ const buildDate = new Date().toISOString();
 		<div class="relative z-10 min-h-screen flex flex-col">
 			<div class="mx-auto w-full max-w-6xl px-2 sm:px-6 flex flex-col gap-12 py-8 flex-grow">
 				<Navigation />
-        <main class="text-hacker-primary w-full flex-grow">
+        <main id="main-content" class="text-hacker-primary w-full flex-grow" role="main" aria-label="Main content">
           <div class="w-full bg-[rgba(0,20,0,0.3)] border border-hacker-primary p-3 sm:p-6 font-mono shadow-glow">
 						<div id="content-container" class="relative overflow-x-auto">
 							<slot />
@@ -194,6 +224,36 @@ const buildDate = new Date().toISOString();
     will-change: transform, opacity;
   }
 
+  /* Accessibility utilities */
+  .sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+  }
+
+  .focus\:not-sr-only:focus {
+    position: static;
+    width: auto;
+    height: auto;
+    padding: inherit;
+    margin: inherit;
+    overflow: visible;
+    clip: auto;
+    white-space: normal;
+  }
+
+  /* Focus management */
+  *:focus {
+    outline: 2px solid var(--hacker-primary);
+    outline-offset: 2px;
+  }
+
   /* Reduce motion if user prefers */
   @media (prefers-reduced-motion: reduce) {
     .animate-matrix,
@@ -203,6 +263,25 @@ const buildDate = new Date().toISOString();
     nav::before {
       animation: none !important;
       transition: none !important;
+    }
+    
+    /* Provide alternative focus indication without animation */
+    *:focus {
+      outline: 3px solid var(--hacker-primary);
+      background-color: rgba(0, 255, 0, 0.1);
+    }
+  }
+
+  /* High contrast mode support */
+  @media (prefers-contrast: high) {
+    :root {
+      --hacker-primary: #ffffff;
+      --hacker-secondary: #ffffff;
+    }
+    
+    body {
+      background-color: #000000 !important;
+      color: #ffffff !important;
     }
   }
 

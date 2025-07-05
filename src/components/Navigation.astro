@@ -1,11 +1,9 @@
 ---
 import NavLink from './NavLink.astro';
+import { NAVIGATION_ITEMS } from '../constants/site';
+import type { NavigationItem } from '../types/common';
 
-const navItems = [
-  { href: '/blog/', label: 'BLOG' },
-  { href: '/', label: 'HOME' },
-  { href: '/resume/', label: 'RESUME' }
-];
+const navItems: NavigationItem[] = NAVIGATION_ITEMS;
 ---
 <nav 
   class="w-full h-16 border border-hacker-primary bg-hacker-darker/50 backdrop-blur-sm rounded relative overflow-hidden group"
