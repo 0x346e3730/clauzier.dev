@@ -143,14 +143,6 @@ export default defineConfig({
     syntaxHighlight: 'shiki',
   },
 
-  // Experimental features for performance
-  experimental: {
-    // Enable content collection caching
-    contentCollectionCache: true,
-    // Enable optimized static build
-    optimizeHoistedScript: true,
-  },
-
   // Compress HTML output
   compressHTML: true,
 });

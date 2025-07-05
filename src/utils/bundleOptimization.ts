@@ -243,26 +243,26 @@ export class IntelligentLoader {
   private async loadAdvancedFeatures(): Promise<void> {
     // Load search functionality
     if (!document.querySelector('#search-loaded')) {
-      const searchModule = await import('../components/Search.js').catch(() => null);
-      if (searchModule) {
+      // const searchModule = await import('../components/Search.js').catch(() => null);
+      // if (searchModule) {
         const marker = document.createElement('div');
         marker.id = 'search-loaded';
         marker.style.display = 'none';
         document.head.appendChild(marker);
-      }
+      // }
     }
   }
   
   private async loadContentFeatures(): Promise<void> {
     // Load reading progress indicator
     if (!document.querySelector('#reading-progress-loaded')) {
-      const progressModule = await import('../components/ReadingProgress.js').catch(() => null);
-      if (progressModule) {
+      // const progressModule = await import('../components/ReadingProgress.js').catch(() => null);
+      // if (progressModule) {
         const marker = document.createElement('div');
         marker.id = 'reading-progress-loaded';
         marker.style.display = 'none';
         document.head.appendChild(marker);
-      }
+      // }
     }
   }
 }

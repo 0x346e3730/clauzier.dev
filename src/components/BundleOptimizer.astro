@@ -10,6 +10,16 @@
     progressiveEnhancer 
   } from '../utils/bundleOptimization';
 
+  declare global {
+    interface Window {
+      __bundleOptimizer?: {
+        getAnalytics: () => any;
+        reportBundle: () => void;
+        isFeatureLoaded: (feature: string) => boolean;
+      };
+    }
+  }
+
   class BundleOptimizer {
     private performanceObserver: PerformanceObserver | null = null;
     
@@ -78,7 +88,7 @@
       // Enhanced animations for capable devices
       await progressiveEnhancer.enhance('animations', async () => {
         if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-          const animationsModule = await import('../styles/enhanced-animations.css');
+          // const animationsModule = await import('../styles/enhanced-animations.css');
           document.documentElement.classList.add('enhanced-animations');
         }
       });
@@ -88,10 +98,10 @@
         const connection = (navigator as any).connection;
         if (connection?.effectiveType === '4g' && connection?.downlink > 2) {
           // Load enhanced interactions
-          const interactionsModule = await import('../utils/advancedInteractions.js').catch(() => null);
-          if (interactionsModule) {
+          // const interactionsModule = await import('../utils/advancedInteractions.js').catch(() => null);
+          // if (interactionsModule) {
             document.documentElement.classList.add('enhanced-interactions');
-          }
+          // }
         }
       });
       
@@ -101,10 +111,10 @@
         const gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl');
         
         if (gl) {
-          const effectsModule = await import('../effects/webgl-effects.js').catch(() => null);
-          if (effectsModule) {
+          // const effectsModule = await import('../effects/webgl-effects.js').catch(() => null);
+          // if (effectsModule) {
             document.documentElement.classList.add('webgl-enhanced');
-          }
+          // }
         }
       });
       
@@ -112,10 +122,10 @@
       await progressiveEnhancer.enhance('serviceWorker', async () => {
         if ('serviceWorker' in navigator) {
           // Advanced caching strategies
-          const advancedCachingModule = await import('../utils/advancedCaching.js').catch(() => null);
-          if (advancedCachingModule) {
+          // const advancedCachingModule = await import('../utils/advancedCaching.js').catch(() => null);
+          // if (advancedCachingModule) {
             console.log('Advanced caching strategies loaded');
-          }
+          // }
         }
       });
     }
