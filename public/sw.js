@@ -7,6 +7,22 @@ const CRITICAL_ASSETS = [
   '/offline',
   '/manifest.json',
   // Add critical CSS and JS files here when known
+  '/_astro/blog.CWU3ODAG.css',
+  '/_astro/BundleOptimizer.astro_astro_type_script_index_0_lang.BhJ_1dm0.js',
+  '/_astro/PerformanceMonitor.astro_astro_type_script_index_0_lang.CjBeLIyn.js',
+  '/_astro/TerminalPrompt.Czmau8Yk.js',
+  '/_astro/_astro_assets.d3cJN0Vx.js',
+  '/_astro/_astro_content.aM_MA59D.js',
+  '/_astro/_astro_data-layer-content.CySzSveO.js',
+  '/_astro/astro.B2iS74Yv.js',
+  '/_astro/consts.7OPt-DQA.js',
+  '/_astro/content-assets.DleWbedO.js',
+  '/_astro/content-modules.DVH4QP3X.js',
+  '/_astro/experience.Bnj0-WZ0.js',
+  '/_astro/page.DBFRKS7h.js',
+  '/_astro/sharp.DcNefGb_.js',
+  '/_astro/why-is-overengineering-your-worst-enemy.CbzuHY-X.js',
+  '/_astro/why-is-overengineering-your-worst-enemy.xbNMldib.js',
 ];
 
 // Assets to cache on first request

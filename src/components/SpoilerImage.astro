@@ -6,13 +6,14 @@ interface Props {
 }
 
 const { src, alt, caption } = Astro.props;
+import OptimizedImage from './OptimizedImage.astro';
 ---
 
 <div class="spoiler-container my-8">
   <div class="spoiler-trigger cursor-pointer select-none">
     <div class="spoiler-content">
       <span class="spoiler-text">Spoiler: Click to reveal image</span>
-      <img 
+      <OptimizedImage 
         src={src} 
         alt={alt} 
         class="spoiler-image hidden w-full rounded-lg"

@@ -7,6 +7,7 @@ import remarkGfm from 'remark-gfm';
 import rehypeSlug from 'rehype-slug';
 import rehypeAutolinkHeadings from 'rehype-autolink-headings';
 import rehypePrettyCode from 'rehype-pretty-code';
+import { visualizer } from 'rollup-plugin-visualizer';
 
 // https://astro.build/config
 export default defineConfig({
@@ -20,15 +21,12 @@ export default defineConfig({
 
   // Performance optimizations
   build: {
-    // Enable CSS code splitting
-    split: true,
-    // Assets inlining threshold (smaller assets will be inlined)
-    assetsInlineLimit: 2048,
+    // No custom properties here; removed invalid options
   },
 
   // Advanced Vite configuration for performance
   vite: {
-    plugins: [tailwindcss()],
+    plugins: [tailwindcss(), visualizer({ filename: 'stats.html', open: false })],
     build: {
       // Enable CSS code splitting
       cssCodeSplit: true,

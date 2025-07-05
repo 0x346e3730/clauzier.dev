@@ -87,6 +87,44 @@ const buildDate = new Date().toISOString();
     <BundleOptimizer />
     <PerformanceMonitor />
 
+    <!-- Inline critical CSS for above-the-fold content -->
+    <style is:inline>
+      :root {
+        --hacker-primary: #00ff00;
+        --hacker-secondary: #003300;
+      }
+      html, body {
+        background-color: #000;
+      }
+      body {
+        font-family: 'Monaspace Neon', monospace;
+        font-size: 15px;
+        line-height: 1.7;
+        font-feature-settings: "calt" 1, "liga" 0, "ss01" 1, "ss02" 1, "ss03" 1, "ss04" 1, "ss05" 1, "ss06" 1, "ss07" 1, "ss08" 1;
+      }
+      ::selection {
+        background-color: rgba(0, 255, 0, 0.3);
+        color: var(--hacker-primary);
+      }
+      h1, h2, h3, h4, h5, h6 {
+        color: var(--hacker-primary) !important;
+        font-family: 'Monaspace Neon', monospace;
+        font-weight: 600;
+        letter-spacing: -0.02em;
+      }
+      a {
+        color: var(--hacker-primary) !important;
+        text-decoration: none;
+        position: relative;
+        transition: all 0.2s ease-in-out;
+        font-family: 'Monaspace Neon', monospace;
+        font-weight: 500;
+      }
+      a:hover {
+        color: var(--hacker-primary) !important;
+      }
+    </style>
+
 	</head>
   <body class="bg-hacker-terminal font-mono text-hacker-primary min-h-screen relative overflow-x-hidden antialiased">
 		<!-- Skip navigation link for accessibility -->

@@ -38,13 +38,9 @@ const allCriticalStyles = [...currentResources.styles, ...criticalStyles];
 ---
 
 <!-- DNS Prefetch for external domains -->
-<link rel="dns-prefetch" href="https://fonts.googleapis.com" />
-<link rel="dns-prefetch" href="https://fonts.gstatic.com" />
 <link rel="dns-prefetch" href="https://plausible.clauzier.dev" />
 
 <!-- Preconnect to critical third-party origins -->
-<link rel="preconnect" href="https://fonts.googleapis.com" />
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link rel="preconnect" href="https://plausible.clauzier.dev" />
 
 <!-- Preload critical fonts -->
@@ -151,6 +147,8 @@ const allCriticalStyles = [...currentResources.styles, ...criticalStyles];
   
   // Intelligent resource loading based on user behavior
   class ResourceManager {
+    prefetchQueue: Set<string>;
+    observer: IntersectionObserver | null;
     constructor() {
       this.prefetchQueue = new Set();
       this.observer = null;
@@ -172,7 +170,7 @@ const allCriticalStyles = [...currentResources.styles, ...criticalStyles];
       this.observer = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
           if (entry.isIntersecting) {
-            this.loadResource(entry.target);
+            this.loadResource(entry.target as HTMLElement);
           }
         });
       }, {
@@ -182,50 +180,53 @@ const allCriticalStyles = [...currentResources.styles, ...criticalStyles];
       
       // Observe lazy-loadable elements
       document.querySelectorAll('[data-lazy-src]').forEach(el => {
-        this.observer.observe(el);
+        this.observer!.observe(el);
       });
     }
     
     setupHoverPrefetch() {
       document.addEventListener('mouseenter', (e) => {
-        const link = e.target.closest('a[href]');
-        if (link && link.hostname === location.hostname) {
-          this.prefetchPage(link.href);
+        const target = e.target as HTMLElement | null;
+        if (target) {
+          const link = (target.closest && target.closest('a[href]')) as HTMLAnchorElement | null;
+          if (link && link.hostname === location.hostname) {
+            this.prefetchPage(link.href);
+          }
         }
       }, { passive: true });
     }
     
     setupAdaptiveLoading() {
       if ('connection' in navigator) {
-        const connection = navigator.connection;
+        const connection = navigator.connection as any;
         
         // Adjust loading strategy based on connection
-        if (connection.effectiveType === 'slow-2g' || connection.effectiveType === '2g') {
+        if (connection?.effectiveType === 'slow-2g' || connection?.effectiveType === '2g') {
           // Minimal loading for slow connections
           this.enableLowDataMode();
-        } else if (connection.effectiveType === '4g') {
+        } else if (connection?.effectiveType === '4g') {
           // Aggressive prefetching for fast connections
           this.enableHighPerformanceMode();
         }
       }
     }
     
-    prefetchPage(url) {
-      if (this.prefetchQueue.has(url)) return;
-      
-      this.prefetchQueue.add(url);
-      const link = document.createElement('link');
-      link.rel = 'prefetch';
-      link.href = url;
-      document.head.appendChild(link);
+    prefetchPage(url: string) {
+      if (!this.prefetchQueue.has(url)) {
+        this.prefetchQueue.add(url);
+        const link = document.createElement('link');
+        link.rel = 'prefetch';
+        link.href = url;
+        document.head.appendChild(link);
+      }
     }
     
-    loadResource(element) {
-      const src = element.dataset.lazySrc;
+    loadResource(element: HTMLElement) {
+      const src = element.getAttribute('data-lazy-src');
       if (src) {
-        element.src = src;
+        element.setAttribute('src', src);
         element.removeAttribute('data-lazy-src');
-        this.observer.unobserve(element);
+        this.observer!.unobserve(element);
       }
     }
     

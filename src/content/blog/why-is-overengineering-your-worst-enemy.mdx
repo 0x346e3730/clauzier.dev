@@ -6,13 +6,13 @@ tags: ['php', 'symfony', 'api-platform']
 draft: true
 ---
 
+import OptimizedImage from '../../components/OptimizedImage.astro';
+
 Spoiler : this article covers how I made a HUGE production improvement from one single, used a lot, over-engineered part of the application I was working on.
 
-![Spoiler: CPU Chart](/images/blog/hashmapfix_cpu_chart.png)
-*CPU usage (and spikes) before and after the fix*
+<OptimizedImage src="/images/blog/hashmapfix_cpu_chart.png" alt="Spoiler: CPU Chart" caption="CPU usage (and spikes) before and after the fix" width={800} height={400} />
 
-![Spoiler: RAM Chart](/images/blog/hashmapfix_ram_chart.png)
-*Memory usage before and after the fix*
+<OptimizedImage src="/images/blog/hashmapfix_ram_chart.png" alt="Spoiler: RAM Chart" caption="Memory usage before and after the fix" width={800} height={400} />
 
 With my experience, I've came to the conclusion that over-engineering is everyone's worst enemy.
 
