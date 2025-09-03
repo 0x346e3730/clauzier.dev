@@ -40,6 +40,6 @@
   },
   "devDependencies": {
     "rollup-plugin-visualizer": "^6.0.3",
-    "terser": "^5.43.1"
+    "terser": "^5.44.0"
   }
 }
