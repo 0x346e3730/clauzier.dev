@@ -2,7 +2,7 @@ import type { SiteConfig } from '../types/common';
 
 export const SITE_CONFIG: SiteConfig = {
   title: 'Antonin CLAUZIER',
-  description: 'Personal blog and portfolio of Antonin CLAUZIER - Software Engineer',
+  description: 'Personal website (and blog) of Antonin CLAUZIER',
   author: 'Antonin CLAUZIER',
   email: 'contact@clauzier.dev',
   social: {
@@ -21,7 +21,7 @@ export const SITE_CONFIG: SiteConfig = {
 export const PERSONAL_INFO = {
   BIRTH_DATE: new Date('1998-05-22'),
   LOCATION: 'Saint-Denis, La Réunion',
-  PROFESSION: 'Lead Developer',
+  PROFESSION: 'Lead Dev',
   ORGANIZATIONS: {
     BLUE_WALL: {
       name: 'Le Blue Wall',
@@ -30,7 +30,7 @@ export const PERSONAL_INFO = {
     },
     SAUVADE: {
       name: 'Sauvade',
-      url: 'https://www.sauvade.fr/',
+      url: 'https://asso-sauvade.fr/',
       description: 'Animal rescue association',
     },
   },
@@ -56,8 +56,8 @@ export const NAVIGATION_ITEMS = [
 
 export const SEO_DEFAULTS = {
   TITLE_TEMPLATE: '%s | Antonin CLAUZIER',
-  DESCRIPTION: 'Personal website and blog of Antonin CLAUZIER, Lead Developer specializing in web technologies and e-commerce solutions.',
-  KEYWORDS: ['Antonin CLAUZIER', 'developer', 'software engineer', 'web development', 'blog', 'portfolio'],
+  DESCRIPTION: 'Personal website and blog of Antonin CLAUZIER, Lead Developer specializing in web technologies.',
+  KEYWORDS: ['Antonin CLAUZIER', 'software engineering', 'web development', 'blog'],
   LOCALE: 'en_US',
   SITE_URL: 'https://clauzier.dev',
 } as const;
