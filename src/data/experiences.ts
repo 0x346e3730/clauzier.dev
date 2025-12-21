@@ -2,9 +2,9 @@ import type { Experience } from '../types/experience';
 
 export const experiences: Experience[] = [
   {
-    id: "drapo-lead-dev",
+    id: "opx-lead-dev",
     title: "Lead Dev",
-    company: "Drapo Solutions",
+    company: "OPX",
     tags: [
       { label: "Current", colorType: "primary" },
       { label: "Full-time", colorType: "secondary" }
