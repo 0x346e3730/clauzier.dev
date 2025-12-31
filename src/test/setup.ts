@@ -1,11 +1,4 @@
-import { expect, afterEach } from 'vitest';
-import { cleanup } from '@testing-library/dom';
-import * as matchers from '@testing-library/jest-dom/matchers';
+import { expect } from 'vitest';
 
-// Extend Vitest's expect with testing-library matchers
-expect.extend(matchers);
-
-// Clean up after each test
-afterEach(() => {
-  cleanup();
-});
+// Setup file for Vitest tests
+// Add global test configuration here if needed

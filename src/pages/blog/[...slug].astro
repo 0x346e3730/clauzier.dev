@@ -2,28 +2,32 @@
 import { getCollection, type CollectionEntry } from 'astro:content';
 import Layout from '../../layouts/Layout.astro';
 import TerminalPrompt from '../../components/TerminalPrompt.astro';
+import BlogTOC from '../../components/BlogTOC.astro';
+import ReadingProgressBar from '../../components/ReadingProgressBar.astro';
+import RelatedPosts from '../../components/RelatedPosts.astro';
 import { calculateReadingTime } from '../../utils/readingTime';
 
 interface Props {
   post: CollectionEntry<'blog'>;
+  allPosts: CollectionEntry<'blog'>[];
 }
 
 export async function getStaticPaths() {
   const posts = await getCollection('blog');
   return posts.map((post: CollectionEntry<'blog'>) => ({
     params: { slug: post.slug },
-    props: { post },
+    props: { post, allPosts: posts },
   }));
 }
 
-const { post } = Astro.props;
+const { post, allPosts } = Astro.props;
 
 // Redirect external posts
 if (post.data.external) {
   return Astro.redirect(post.data.external.url);
 }
 
-const { Content } = await post.render();
+const { Content, headings } = await post.render();
 const readingTime = calculateReadingTime(post.body);
 
 // Format date for meta tags
@@ -38,10 +42,13 @@ const readableDate = post.data.pubDate.toLocaleDateString('en-US', {
 const metaDescription = post.data.description || `Read ${post.data.title} by Antonin CLAUZIER`;
 ---
 
-<Layout 
+<Layout
   pageTitle={`Antonin CLAUZIER - Blog - ${post.data.title}`}
 >
+  <ReadingProgressBar />
   <TerminalPrompt command={`cat ${post.slug}.md`} />
+
+  <BlogTOC headings={headings} />
 
   <article class="prose prose-invert prose-hacker mt-8 prose-headings:font-bold prose-a:no-underline" itemscope itemtype="http://schema.org/BlogPosting">
     <meta itemprop="datePublished" content={formattedDate} />
@@ -69,6 +76,9 @@ const metaDescription = post.data.description || `Read ${post.data.title} by Ant
     <div itemprop="articleBody">
       <Content />
     </div>
+
+    <!-- Related Posts -->
+    <RelatedPosts currentPost={post} allPosts={allPosts} />
   </article>
 </Layout>
 

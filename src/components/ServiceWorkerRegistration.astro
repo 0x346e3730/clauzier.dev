@@ -1,0 +1,49 @@
+---
+// Service Worker Registration
+// Only register in production
+const isProduction = import.meta.env.PROD;
+---
+
+{isProduction && (
+  <script>
+    if ('serviceWorker' in navigator) {
+      // Import Workbox window for better service worker management
+      import('workbox-window').then(({ Workbox }) => {
+        const wb = new Workbox('/sw.js');
+
+        // Add event listeners for service worker lifecycle events
+        wb.addEventListener('installed', (event) => {
+          // Service worker installed
+        });
+
+        wb.addEventListener('activated', (event) => {
+          // Service worker activated
+        });
+
+        wb.addEventListener('waiting', (event) => {
+          // Auto-reload when new service worker takes control
+          wb.addEventListener('controlling', () => {
+            window.location.reload();
+          });
+
+          // Tell the waiting service worker to activate immediately
+          wb.messageSkipWaiting();
+        });
+
+        wb.addEventListener('controlling', () => {
+          // Service worker is controlling the page
+        });
+
+        // Register the service worker
+        wb.register().catch(() => {
+          // Service worker registration failed
+        });
+
+        // Check for updates periodically (every hour)
+        setInterval(() => {
+          wb.update();
+        }, 60 * 60 * 1000);
+      });
+    }
+  </script>
+)}

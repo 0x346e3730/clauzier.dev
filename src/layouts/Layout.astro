@@ -3,6 +3,7 @@ import Footer from '../components/Footer.astro';
 import Navigation from '../components/Navigation.astro';
 import SEOHead from '../components/SEOHead.astro';
 import CriticalResourceHints from '../components/CriticalResourceHints.astro';
+import ServiceWorkerRegistration from '../components/ServiceWorkerRegistration.astro';
 import '../styles/global.css';
 import { generateSEO, generateStructuredData } from '../utils/seo';
 import { SITE_CONFIG } from '../constants/site';
@@ -13,13 +14,15 @@ interface Props {
   description?: string;
   seo?: Partial<SEOData>;
   structuredData?: object;
+  heroImage?: string; // Optional hero image for preloading
 }
 
-const { 
+const {
   pageTitle = SITE_CONFIG.title,
   description = SITE_CONFIG.description,
   seo = {},
-  structuredData
+  structuredData,
+  heroImage
 } = Astro.props;
 
 // Generate SEO data
@@ -63,7 +66,10 @@ const buildDate = new Date().toISOString();
     <SEOHead seo={seoData} structuredData={websiteStructuredData} />
 
     <!-- Critical Resource Hints -->
-    <CriticalResourceHints page={Astro.url.pathname.includes('/blog/') ? 'blog' : Astro.url.pathname.includes('/resume') ? 'resume' : 'home'} />
+    <CriticalResourceHints
+      page={Astro.url.pathname.includes('/blog/') ? 'blog' : Astro.url.pathname.includes('/resume') ? 'resume' : 'home'}
+      heroImage={heroImage}
+    />
     
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="canonical" href={Astro.url.href} />
@@ -148,6 +154,9 @@ const buildDate = new Date().toISOString();
 		
 		<!-- Terminal cursor effect -->
 		<div class="fixed bottom-4 right-4 w-3 h-6 bg-hacker-primary animate-terminal-blink" aria-hidden="true"></div>
+
+		<!-- Service Worker Registration -->
+		<ServiceWorkerRegistration />
 </body>
 </html>
 

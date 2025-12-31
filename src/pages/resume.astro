@@ -9,9 +9,12 @@ import { Icon } from 'astro-icon/components';
 import { calculateExperience } from '../utils/experience';
 
 const experience = calculateExperience();
+
+// Get the processed image src for preloading
+const profileImageSrc = profileImage.src;
 ---
 
-<Layout pageTitle="Antonin CLAUZIER - Resume">
+<Layout pageTitle="Antonin CLAUZIER - Resume" heroImage={profileImageSrc}>
   <TerminalPrompt command="cat resume.md" />
 
   <div class="grid grid-cols-1 md:grid-cols-[minmax(200px,300px)_1fr] gap-6">

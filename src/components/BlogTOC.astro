@@ -1,0 +1,167 @@
+---
+interface Heading {
+  depth: number;
+  text: string;
+  slug: string;
+}
+
+interface Props {
+  headings: Heading[];
+}
+
+const { headings } = Astro.props;
+
+// Filter to only show h2 and h3 headings for better UX
+const filteredHeadings = headings.filter(h => h.depth >= 2 && h.depth <= 3);
+
+// Don't render TOC if there are too few headings
+if (filteredHeadings.length < 2) {
+  return null;
+}
+---
+
+<aside class="toc-container border border-hacker-primary/50 bg-[rgba(0,20,0,0.3)] p-4 rounded mb-8 sticky top-4">
+  <h2 class="text-lg font-bold mb-3 text-hacker-secondary flex items-center gap-2">
+    <span class="text-hacker-primary">&gt;_</span>
+    <span>Table of Contents</span>
+  </h2>
+  <nav class="toc-nav">
+    <ul class="space-y-2">
+      {filteredHeadings.map((heading) => (
+        <li
+          class={`toc-item toc-depth-${heading.depth}`}
+          style={heading.depth === 3 ? 'margin-left: 1rem' : ''}
+        >
+          <a
+            href={`#${heading.slug}`}
+            class="toc-link text-hacker-primary hover:text-hacker-secondary transition-colors duration-200 text-sm block py-1"
+          >
+            <span class="toc-marker text-hacker-secondary">→</span>
+            <span>{heading.text}</span>
+          </a>
+        </li>
+      ))}
+    </ul>
+  </nav>
+</aside>
+
+<style>
+  .toc-link {
+    display: flex;
+    align-items: baseline;
+    gap: 0.5rem;
+  }
+
+  .toc-marker {
+    opacity: 0;
+    transition: opacity 0.2s ease;
+  }
+
+  .toc-link:hover .toc-marker {
+    opacity: 1;
+  }
+
+  .toc-link.active {
+    color: var(--hacker-secondary);
+    font-weight: 600;
+  }
+
+  .toc-link.active .toc-marker {
+    opacity: 1;
+  }
+
+  /* Sticky positioning with proper spacing */
+  .toc-container {
+    max-height: calc(100vh - 2rem);
+    overflow-y: auto;
+  }
+
+  /* Hide scrollbar but keep functionality */
+  .toc-container::-webkit-scrollbar {
+    width: 4px;
+  }
+
+  .toc-container::-webkit-scrollbar-track {
+    background: rgba(0, 255, 0, 0.1);
+  }
+
+  .toc-container::-webkit-scrollbar-thumb {
+    background: var(--hacker-primary);
+    border-radius: 2px;
+  }
+
+  .toc-container::-webkit-scrollbar-thumb:hover {
+    background: var(--hacker-secondary);
+  }
+</style>
+
+<script>
+  // Highlight current section in TOC based on scroll position
+  function highlightCurrentSection() {
+    const headings = document.querySelectorAll('article h2[id], article h3[id]');
+    const tocLinks = document.querySelectorAll('.toc-link');
+
+    if (!headings.length || !tocLinks.length) return;
+
+    const scrollPosition = window.scrollY + 100; // Add offset for better UX
+
+    let currentSection = '';
+    headings.forEach((heading) => {
+      const headingTop = (heading as HTMLElement).offsetTop;
+      if (scrollPosition >= headingTop) {
+        currentSection = heading.id;
+      }
+    });
+
+    tocLinks.forEach((link) => {
+      const href = link.getAttribute('href');
+      if (href === `#${currentSection}`) {
+        link.classList.add('active');
+      } else {
+        link.classList.remove('active');
+      }
+    });
+  }
+
+  // Smooth scroll to section
+  function setupSmoothScroll() {
+    const tocLinks = document.querySelectorAll('.toc-link');
+    tocLinks.forEach((link) => {
+      link.addEventListener('click', (e) => {
+        e.preventDefault();
+        const href = link.getAttribute('href');
+        if (href) {
+          const target = document.querySelector(href);
+          if (target) {
+            target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            // Update URL without jumping
+            history.pushState(null, '', href);
+          }
+        }
+      });
+    });
+  }
+
+  // Initialize on page load
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', () => {
+      highlightCurrentSection();
+      setupSmoothScroll();
+    });
+  } else {
+    highlightCurrentSection();
+    setupSmoothScroll();
+  }
+
+  // Update on scroll
+  let ticking = false;
+  window.addEventListener('scroll', () => {
+    if (!ticking) {
+      window.requestAnimationFrame(() => {
+        highlightCurrentSection();
+        ticking = false;
+      });
+      ticking = true;
+    }
+  });
+</script>

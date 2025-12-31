@@ -216,7 +216,7 @@ export async function detectImageSupport(): Promise<{
       avifImg.src = testImages.avif;
     });
   } catch (error) {
-    console.warn('Error detecting image format support:', error);
+    // Error detecting image format support, using fallback
   }
 
   return results;

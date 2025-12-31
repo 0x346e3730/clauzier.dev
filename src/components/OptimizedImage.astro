@@ -60,7 +60,7 @@ try {
     optimizedSrc = await import(src);
   }
 } catch (error) {
-  console.warn(`Could not import image: ${src}`, error);
+  // Could not import image, using fallback
   optimizedSrc = src;
 }
 ---
@@ -223,13 +223,13 @@ try {
     handleImageError(event: Event) {
       const img = event.target as HTMLImageElement;
       const container = img.closest('.image-container');
-      
+
       if (container) {
         container.classList.remove('loading');
         container.classList.add('error');
       }
-      
-      console.warn('Failed to load image:', img.src);
+
+      // Failed to load image
     }
   }
   

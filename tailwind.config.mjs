@@ -14,10 +14,6 @@ export default {
 					'terminal': '#0C0C0C',  // Terminal black
 				}
 			},
-			fontFamily: {
-				'terminal': ['VT323', 'Courier New', 'monospace'],
-				'cyber': ['Share Tech Mono', 'monospace']
-			},
 			animation: {
 				'terminal-blink': 'blink 1s step-end infinite',
 				'scan-line': 'scan 2s linear infinite',

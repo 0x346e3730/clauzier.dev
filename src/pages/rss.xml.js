@@ -1,6 +1,6 @@
 import rss from '@astrojs/rss';
 import { getCollection } from 'astro:content';
-import { SITE_TITLE, SITE_DESCRIPTION } from '../consts';
+import { SITE_CONFIG } from '../constants/site';
 
 export async function GET(context) {
   // Fetch all published blog posts, sorted by date
@@ -14,9 +14,9 @@ export async function GET(context) {
 
   return rss({
     // `<title>` field in output xml
-    title: SITE_TITLE,
+    title: SITE_CONFIG.title,
     // `<description>` field in output xml
-    description: SITE_DESCRIPTION,
+    description: SITE_CONFIG.description,
     // Pull in your project "site" from the endpoint context
     // https://docs.astro.build/en/reference/api-reference/#contextsite
     site: context.site,

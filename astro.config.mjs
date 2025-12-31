@@ -80,10 +80,21 @@ export default defineConfig({
   // Integrations with optimizations
   integrations: [
     icon({
-      // Optimize icon handling
+      // Optimize icon handling - only include icons actually used
       include: {
-        ph: ['*'], // Include only used Phosphor icons
-        la: ['*'], // Include only used Line Awesome icons
+        ph: [
+          'envelope',
+          'globe',
+          'map-pin',
+          'linkedin-logo',
+          'github-logo',
+          'x-logo',
+          'instagram-logo',
+          'twitch-logo',
+          'quotes',
+          'caret-down'
+        ],
+        la: ['symfony'],
       },
     }),
     mdx({

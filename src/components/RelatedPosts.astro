@@ -1,0 +1,122 @@
+---
+import type { CollectionEntry } from 'astro:content';
+
+interface Props {
+  currentPost: CollectionEntry<'blog'>;
+  allPosts: CollectionEntry<'blog'>[];
+  maxPosts?: number;
+}
+
+const { currentPost, allPosts, maxPosts = 3 } = Astro.props;
+
+// Function to calculate similarity score between two posts based on shared tags
+function calculateSimilarity(post1: CollectionEntry<'blog'>, post2: CollectionEntry<'blog'>): number {
+  const tags1 = post1.data.tags || [];
+  const tags2 = post2.data.tags || [];
+
+  const sharedTags = tags1.filter(tag => tags2.includes(tag));
+  return sharedTags.length;
+}
+
+// Get related posts
+const relatedPosts = allPosts
+  .filter(post => post.slug !== currentPost.slug) // Exclude current post
+  .filter(post => !post.data.draft) // Exclude drafts
+  .map(post => ({
+    post,
+    similarity: calculateSimilarity(currentPost, post)
+  }))
+  .filter(({ similarity }) => similarity > 0) // Only posts with at least one shared tag
+  .sort((a, b) => {
+    // Sort by similarity first, then by date
+    if (b.similarity !== a.similarity) {
+      return b.similarity - a.similarity;
+    }
+    return b.post.data.pubDate.valueOf() - a.post.data.pubDate.valueOf();
+  })
+  .slice(0, maxPosts)
+  .map(({ post }) => post);
+
+// Don't render if no related posts
+if (relatedPosts.length === 0) {
+  return null;
+}
+---
+
+<section class="related-posts mt-12 border-t-2 border-hacker-primary/30 pt-8">
+  <h2 class="text-2xl font-bold mb-6 flex items-center gap-2">
+    <span class="text-hacker-primary">&gt;_</span>
+    <span>Related Posts</span>
+  </h2>
+
+  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+    {relatedPosts.map((post) => {
+      const readableDate = post.data.pubDate.toLocaleDateString('en-US', {
+        year: 'numeric',
+        month: 'short',
+        day: 'numeric'
+      });
+
+      return (
+        <article class="related-post-card border border-hacker-primary/50 bg-[rgba(0,20,0,0.3)] p-4 rounded hover:border-hacker-secondary hover:shadow-[0_0_20px_rgba(0,255,0,0.3)] transition-all duration-300">
+          <a href={`/blog/${post.slug}/`} class="block">
+            <h3 class="text-lg font-bold mb-2 text-hacker-primary hover:text-hacker-secondary transition-colors">
+              {post.data.title}
+            </h3>
+
+            {post.data.description && (
+              <p class="text-sm text-hacker-primary/80 mb-3 line-clamp-2">
+                {post.data.description}
+              </p>
+            )}
+
+            <div class="flex items-center justify-between text-xs metadata">
+              <time datetime={post.data.pubDate.toISOString()} class="text-hacker-secondary">
+                {readableDate}
+              </time>
+
+              {post.data.tags && post.data.tags.length > 0 && (
+                <div class="flex gap-2">
+                  {post.data.tags.slice(0, 2).map((tag: string) => (
+                    <span class="text-hacker-secondary tag">#{tag}</span>
+                  ))}
+                </div>
+              )}
+            </div>
+          </a>
+        </article>
+      );
+    })}
+  </div>
+</section>
+
+<style>
+  .related-post-card {
+    position: relative;
+  }
+
+  .related-post-card::before {
+    content: '';
+    position: absolute;
+    top: -2px;
+    left: -2px;
+    right: -2px;
+    bottom: -2px;
+    background: linear-gradient(45deg, transparent, rgba(0, 255, 0, 0.1));
+    border-radius: inherit;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    z-index: -1;
+  }
+
+  .related-post-card:hover::before {
+    opacity: 1;
+  }
+
+  .line-clamp-2 {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+</style>

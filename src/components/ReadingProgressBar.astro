@@ -1,0 +1,83 @@
+---
+// Reading Progress Bar - Shows how far the user has scrolled through the article
+---
+
+<div class="reading-progress-container" aria-hidden="true">
+  <div class="reading-progress-bar"></div>
+</div>
+
+<style>
+  .reading-progress-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: rgba(0, 255, 0, 0.1);
+    z-index: 9999;
+    pointer-events: none;
+  }
+
+  .reading-progress-bar {
+    height: 100%;
+    width: 0%;
+    background: linear-gradient(90deg, #00ff00 0%, #0f0 100%);
+    box-shadow: 0 0 10px rgba(0, 255, 0, 0.5);
+    transition: width 0.1s ease-out;
+  }
+
+  /* Add glow effect when progress is active */
+  .reading-progress-bar::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    width: 20px;
+    background: linear-gradient(90deg, transparent, rgba(0, 255, 0, 0.6));
+    filter: blur(4px);
+  }
+</style>
+
+<script>
+  function updateReadingProgress() {
+    const progressBar = document.querySelector('.reading-progress-bar') as HTMLElement;
+    if (!progressBar) return;
+
+    // Get the article element or main content
+    const article = document.querySelector('article') || document.querySelector('main');
+    if (!article) return;
+
+    const windowHeight = window.innerHeight;
+    const documentHeight = document.documentElement.scrollHeight - windowHeight;
+    const scrolled = window.scrollY;
+
+    // Calculate percentage
+    const progress = (scrolled / documentHeight) * 100;
+
+    // Update progress bar width
+    progressBar.style.width = `${Math.min(progress, 100)}%`;
+  }
+
+  // Initialize on page load
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', updateReadingProgress);
+  } else {
+    updateReadingProgress();
+  }
+
+  // Update on scroll with requestAnimationFrame for smooth performance
+  let ticking = false;
+  window.addEventListener('scroll', () => {
+    if (!ticking) {
+      window.requestAnimationFrame(() => {
+        updateReadingProgress();
+        ticking = false;
+      });
+      ticking = true;
+    }
+  }, { passive: true });
+
+  // Update on resize
+  window.addEventListener('resize', updateReadingProgress, { passive: true });
+</script>

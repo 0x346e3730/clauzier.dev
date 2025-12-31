@@ -1,0 +1,46 @@
+<svg width="1200" height="630" viewBox="0 0 1200 630" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background -->
+  <rect width="1200" height="630" fill="#0C0C0C"/>
+
+  <!-- Grid pattern -->
+  <defs>
+    <pattern id="grid" width="50" height="50" patternUnits="userSpaceOnUse">
+      <path d="M 50 0 L 0 0 0 50" fill="none" stroke="#00ff00" stroke-width="0.5" opacity="0.1"/>
+    </pattern>
+  </defs>
+  <rect width="1200" height="630" fill="url(#grid)"/>
+
+  <!-- Border -->
+  <rect x="40" y="40" width="1120" height="550" fill="none" stroke="#00ff00" stroke-width="3"/>
+
+  <!-- Corner decorations -->
+  <rect x="30" y="30" width="20" height="20" fill="none" stroke="#00ff00" stroke-width="2"/>
+  <rect x="1150" y="30" width="20" height="20" fill="none" stroke="#00ff00" stroke-width="2"/>
+  <rect x="30" y="580" width="20" height="20" fill="none" stroke="#00ff00" stroke-width="2"/>
+  <rect x="1150" y="580" width="20" height="20" fill="none" stroke="#00ff00" stroke-width="2"/>
+
+  <!-- Terminal prompt -->
+  <text x="80" y="130" font-family="monospace" font-size="32" fill="#0f0" font-weight="bold">
+    visitor@clauzier.dev:~$
+  </text>
+
+  <!-- Site title -->
+  <text x="80" y="230" font-family="monospace" font-size="64" fill="#00ff00" font-weight="bold">
+    ANTONIN CLAUZIER
+  </text>
+
+  <!-- Subtitle -->
+  <text x="80" y="290" font-family="monospace" font-size="28" fill="#00ff00" opacity="0.8">
+    Software Engineer • Tech Lead
+  </text>
+
+  <!-- URL -->
+  <text x="80" y="530" font-family="monospace" font-size="24" fill="#0f0" opacity="0.6">
+    https://clauzier.dev
+  </text>
+
+  <!-- Scan line effect -->
+  <rect x="0" y="0" width="1200" height="2" fill="#00ff00" opacity="0.3">
+    <animate attributeName="y" values="0;630;0" dur="3s" repeatCount="indefinite"/>
+  </rect>
+</svg>

@@ -2,9 +2,10 @@
 // Critical resource hints for performance optimization
 interface Props {
   page?: 'home' | 'blog' | 'post' | 'resume';
+  heroImage?: string; // Optional hero image to preload for better LCP
 }
 
-const { page = 'home' } = Astro.props;
+const { page = 'home', heroImage } = Astro.props;
 ---
 
 <!-- DNS Prefetch for external domains -->
@@ -16,6 +17,11 @@ const { page = 'home' } = Astro.props;
 <!-- Preload critical fonts -->
 <link rel="preload" href="/_astro/monaspace-neon.woff2" as="font" type="font/woff2" crossorigin />
 <link rel="preload" href="/_astro/monaspace-radon.woff2" as="font" type="font/woff2" crossorigin />
+
+<!-- Preload hero images for better LCP -->
+{heroImage && (
+  <link rel="preload" as="image" href={heroImage} fetchpriority="high" />
+)}
 
 <!-- Page-specific prefetching -->
 {page === 'home' && (

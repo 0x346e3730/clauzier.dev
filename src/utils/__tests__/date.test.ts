@@ -12,8 +12,8 @@ describe('Date Utils', () => {
 
     it('should format date with custom options', () => {
       const date = new Date('2023-01-15');
-      const result = formatDate(date, { year: 'numeric', month: 'short' });
-      expect(result).toBe('Jan 2023');
+      const result = formatDate(date, { year: 'numeric', month: 'short', day: 'numeric' });
+      expect(result).toBe('Jan 15, 2023');
     });
   });
 

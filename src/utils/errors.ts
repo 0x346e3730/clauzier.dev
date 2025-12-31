@@ -29,12 +29,12 @@ export class AppError extends Error {
 }
 
 export const handleError = (error: unknown, context: string = 'Unknown'): ErrorInfo => {
-  console.error(`[${context}] Error occurred:`, error);
-  
+  // Error handled silently
+
   if (error instanceof AppError) {
     return error.toJSON();
   }
-  
+
   if (error instanceof Error) {
     return {
       message: error.message,
@@ -43,7 +43,7 @@ export const handleError = (error: unknown, context: string = 'Unknown'): ErrorI
       timestamp: new Date(),
     };
   }
-  
+
   return {
     message: 'An unknown error occurred',
     code: 'UNKNOWN_ERROR',
