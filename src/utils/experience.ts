@@ -28,8 +28,8 @@ export const calculateExperience = () => {
   const currentDay = now.getDate();
   const daysInMonth = new Date(now.getFullYear(), currentMonth + 1, 0).getDate();
   
-  // Progress is current month (starting from December) plus day progress
-  const monthProgress = (currentMonth + 1) / 12; // January = 1/12
+  // Progress is current month (starting from January) plus day progress
+  const monthProgress = currentMonth / 12; // January = 0/12, December = 11/12
   const dayProgress = (currentDay / daysInMonth) / 12; // Fraction of a month
   
   const progressToNextYear = (monthProgress + dayProgress) * 100;
