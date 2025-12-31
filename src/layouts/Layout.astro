@@ -3,8 +3,6 @@ import Footer from '../components/Footer.astro';
 import Navigation from '../components/Navigation.astro';
 import SEOHead from '../components/SEOHead.astro';
 import CriticalResourceHints from '../components/CriticalResourceHints.astro';
-import BundleOptimizer from '../components/BundleOptimizer.astro';
-import PerformanceMonitor from '../components/PerformanceMonitor.astro';
 import '../styles/global.css';
 import { generateSEO, generateStructuredData } from '../utils/seo';
 import { SITE_CONFIG } from '../constants/site';
@@ -80,10 +78,6 @@ const buildDate = new Date().toISOString();
         <script>{`(window as any).plausible = window.plausible || function() { (window.plausible.q = window.plausible.q || []).push(arguments) }`}</script>
       </>
     )}
-    
-    <!-- Performance Optimization Components -->
-    <BundleOptimizer />
-    <PerformanceMonitor />
 
     <!-- Inline critical CSS for above-the-fold content -->
     <style is:inline>

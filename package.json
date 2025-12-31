@@ -21,7 +21,6 @@
   },
   "dependencies": {
     "@astrojs/mdx": "^4.3.13",
-    "@astrojs/node": "^9.5.1",
     "@astrojs/rss": "^4.0.14",
     "@fontsource/monaspace-argon": "^5.2.5",
     "@fontsource/monaspace-neon": "^5.2.5",

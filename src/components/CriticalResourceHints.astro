@@ -2,257 +2,37 @@
 // Critical resource hints for performance optimization
 interface Props {
   page?: 'home' | 'blog' | 'post' | 'resume';
-  criticalImages?: string[];
-  criticalStyles?: string[];
 }
 
-const { page = 'home', criticalImages = [], criticalStyles = [] } = Astro.props;
-
-// Define critical resources per page type
-const criticalResources = {
-  home: {
-    images: ['/images/profile.jpg'],
-    styles: [],
-    scripts: [],
-  },
-  blog: {
-    images: [],
-    styles: [],
-    scripts: [],
-  },
-  post: {
-    images: [],
-    styles: ['/_astro/post.css'],
-    scripts: [],
-  },
-  resume: {
-    images: ['/images/profile.jpg'],
-    styles: [],
-    scripts: [],
-  },
-};
-
-const currentResources = criticalResources[page] || criticalResources.home;
-const allCriticalImages = [...currentResources.images, ...criticalImages];
-const allCriticalStyles = [...currentResources.styles, ...criticalStyles];
+const { page = 'home' } = Astro.props;
 ---
 
 <!-- DNS Prefetch for external domains -->
 <link rel="dns-prefetch" href="https://plausible.clauzier.dev" />
 
-<!-- Preconnect to critical third-party origins -->
+<!-- Preconnect to analytics -->
 <link rel="preconnect" href="https://plausible.clauzier.dev" />
 
 <!-- Preload critical fonts -->
 <link rel="preload" href="/_astro/monaspace-neon.woff2" as="font" type="font/woff2" crossorigin />
 <link rel="preload" href="/_astro/monaspace-radon.woff2" as="font" type="font/woff2" crossorigin />
 
-<!-- Preload critical images -->
-{allCriticalImages.map(image => (
-  <link rel="preload" href={image} as="image" />
-))}
-
-<!-- Preload critical CSS -->
-{allCriticalStyles.map(style => (
-  <link rel="preload" href={style} as="style" />
-))}
-
-<!-- Page-specific resource hints -->
+<!-- Page-specific prefetching -->
 {page === 'home' && (
   <>
-    <!-- Prefetch likely next pages -->
     <link rel="prefetch" href="/blog/" />
     <link rel="prefetch" href="/resume/" />
   </>
 )}
 
 {page === 'blog' && (
-  <>
-    <!-- Prefetch blog post template styles -->
-    <link rel="prefetch" href="/_astro/blog-post.css" />
-  </>
+  <link rel="prefetch" href="/" />
 )}
 
 {page === 'post' && (
-  <>
-    <!-- Prefetch blog index and related posts -->
-    <link rel="prefetch" href="/blog/" />
-  </>
+  <link rel="prefetch" href="/blog/" />
 )}
 
-<!-- Modulepreload for critical JavaScript (when using ES modules) -->
-<link rel="modulepreload" href="/_astro/critical.js" />
-
-<!-- Early hints for CDN optimization -->
-<script type="application/json" id="resource-hints">
-  {
-    "critical_css": [
-      "/_astro/global.css",
-      "/_astro/components.css"
-    ],
-    "critical_js": [
-      "/_astro/app.js"
-    ],
-    "above_fold_images": {JSON.stringify(allCriticalImages)},
-    "page_type": {JSON.stringify(page)}
-  }
-</script>
-
-<style>
-  /* Critical CSS inlined for immediate rendering */
-  :root {
-    --hacker-primary: #00ff00;
-    --hacker-secondary: #0f0;
-    --hacker-accent: #ff00ff;
-    --hacker-dark: #001100;
-    --hacker-darker: #000800;
-    --hacker-terminal: #0C0C0C;
-  }
-  
-  /* Prevent FOUC (Flash of Unstyled Content) */
-  html {
-    visibility: hidden;
-  }
-  
-  html.loaded {
-    visibility: visible;
-  }
-  
-  /* Critical layout styles */
-  body {
-    background-color: var(--hacker-terminal);
-    color: var(--hacker-primary);
-    font-family: 'Monaspace Neon', 'Courier New', monospace;
-    margin: 0;
-    padding: 0;
-    line-height: 1.6;
-  }
-  
-  /* Critical navigation styles */
-  nav {
-    border: 1px solid var(--hacker-primary);
-    background: rgba(0, 8, 0, 0.5);
-  }
-  
-  /* Critical main content styles */
-  main {
-    background: rgba(0, 20, 0, 0.3);
-    border: 1px solid var(--hacker-primary);
-  }
-</style>
-
-<script>
-  // Mark document as loaded to prevent FOUC
-  document.documentElement.classList.add('loaded');
-  
-  // Intelligent resource loading based on user behavior
-  class ResourceManager {
-    prefetchQueue: Set<string>;
-    observer: IntersectionObserver | null;
-    constructor() {
-      this.prefetchQueue = new Set();
-      this.observer = null;
-      this.init();
-    }
-    
-    init() {
-      // Setup intersection observer for lazy loading
-      this.setupIntersectionObserver();
-      
-      // Prefetch on hover/focus
-      this.setupHoverPrefetch();
-      
-      // Adaptive loading based on connection speed
-      this.setupAdaptiveLoading();
-    }
-    
-    setupIntersectionObserver() {
-      this.observer = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-          if (entry.isIntersecting) {
-            this.loadResource(entry.target as HTMLElement);
-          }
-        });
-      }, {
-        rootMargin: '50px',
-        threshold: 0.1
-      });
-      
-      // Observe lazy-loadable elements
-      document.querySelectorAll('[data-lazy-src]').forEach(el => {
-        this.observer!.observe(el);
-      });
-    }
-    
-    setupHoverPrefetch() {
-      document.addEventListener('mouseenter', (e) => {
-        const target = e.target as HTMLElement | null;
-        if (target) {
-          const link = (target.closest && target.closest('a[href]')) as HTMLAnchorElement | null;
-          if (link && link.hostname === location.hostname) {
-            this.prefetchPage(link.href);
-          }
-        }
-      }, { passive: true });
-    }
-    
-    setupAdaptiveLoading() {
-      if ('connection' in navigator) {
-        const connection = navigator.connection as any;
-        
-        // Adjust loading strategy based on connection
-        if (connection?.effectiveType === 'slow-2g' || connection?.effectiveType === '2g') {
-          // Minimal loading for slow connections
-          this.enableLowDataMode();
-        } else if (connection?.effectiveType === '4g') {
-          // Aggressive prefetching for fast connections
-          this.enableHighPerformanceMode();
-        }
-      }
-    }
-    
-    prefetchPage(url: string) {
-      if (!this.prefetchQueue.has(url)) {
-        this.prefetchQueue.add(url);
-        const link = document.createElement('link');
-        link.rel = 'prefetch';
-        link.href = url;
-        document.head.appendChild(link);
-      }
-    }
-    
-    loadResource(element: HTMLElement) {
-      const src = element.getAttribute('data-lazy-src');
-      if (src) {
-        element.setAttribute('src', src);
-        element.removeAttribute('data-lazy-src');
-        this.observer!.unobserve(element);
-      }
-    }
-    
-    enableLowDataMode() {
-      // Disable non-critical animations
-      document.documentElement.classList.add('reduce-motion');
-      
-      // Skip non-critical prefetching
-      console.log('Low data mode enabled');
-    }
-    
-    enableHighPerformanceMode() {
-      // Prefetch all likely navigation targets
-      const criticalPages = ['/blog/', '/resume/'];
-      criticalPages.forEach(page => this.prefetchPage(page));
-      
-      console.log('High performance mode enabled');
-    }
-  }
-  
-  // Initialize resource manager when DOM is ready
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', () => {
-      new ResourceManager();
-    });
-  } else {
-    new ResourceManager();
-  }
-</script>
+{page === 'resume' && (
+  <link rel="prefetch" href="/" />
+)}
