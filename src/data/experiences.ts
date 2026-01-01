@@ -13,7 +13,9 @@ export const experiences: Experience[] = [
     endDate: null,
     location: "remote",
     description: [
-      "Work In Progress...",
+      "Tackled various pain points to improve delivery",
+      "Improved CI and CD",
+      "And more to come...",
     ]
   },
   {
@@ -32,7 +34,7 @@ export const experiences: Experience[] = [
       "Managing our infrastructure and introducing security measures across all departments to make sure our clients' data are safe",
       "Made it to 1M€ ARR !",
       "Tackled various legacy issues, including one that resulted in over a 10x improvement in loading some critical parts of the applications for the bigger clients",
-      "Migrated over a quarter of a billion euros of client invoices from an old, slow model schema to a brand new, more logical one"
+      "Migrated the invoice system with over a quarter of a billion euros of client invoices"
     ]
   },
   {

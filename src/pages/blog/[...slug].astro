@@ -48,6 +48,12 @@ const metaDescription = post.data.description || `Read ${post.data.title} by Ant
   <ReadingProgressBar />
   <TerminalPrompt command={`cat ${post.slug}.md`} />
 
+  {post.data.draft && import.meta.env.DEV && (
+    <div class="bg-yellow-500/10 border border-yellow-500 text-yellow-500 px-4 py-2 mb-6 font-mono text-sm">
+      ⚠️ DRAFT - This post is not published and will not appear in production
+    </div>
+  )}
+
   <BlogTOC headings={headings} />
 
   <article class="prose prose-invert prose-hacker mt-8 prose-headings:font-bold prose-a:no-underline" itemscope itemtype="http://schema.org/BlogPosting">
@@ -100,36 +106,58 @@ const metaDescription = post.data.description || `Read ${post.data.title} by Ant
     --tw-prose-invert-pre-bg: var(--hacker-terminal);
     --tw-prose-invert-th-borders: var(--hacker-secondary);
     --tw-prose-invert-td-borders: var(--hacker-primary);
+    font-size: 1.0625rem; /* 17px for better readability */
+    max-width: 100%;
+    overflow: visible;
+    overflow-wrap: break-word;
+    word-wrap: break-word;
+  }
+
+  :global(.prose-hacker > *) {
+    max-width: 100%;
+  }
+
+  /* Improve paragraph readability */
+  :global(.prose p) {
+    margin-top: 1.25rem;
+    margin-bottom: 1.25rem;
+    line-height: 1.8;
+    overflow-wrap: break-word;
+    word-wrap: break-word;
+  }
+
+  :global(.prose p:first-child) {
+    margin-top: 0;
+  }
+
+  :global(.prose p:last-child) {
+    margin-bottom: 0;
   }
 
   /* Ensure code blocks don't overflow on mobile */
   :global(.prose pre) {
     overflow-x: auto;
-    white-space: pre-wrap;
-    word-wrap: break-word;
+    white-space: pre;
+    word-wrap: normal;
     padding: 1rem;
     border-radius: 0.25rem;
     border: 1px solid var(--hacker-primary);
+    margin: 1.5rem 0;
+    max-width: 100%;
   }
 
-  /* Style spoiler images and their captions */
+  :global(.prose pre code) {
+    white-space: pre;
+    word-break: normal;
+    overflow-wrap: normal;
+  }
+
+  /* Style images */
   :global(.prose img) {
     max-width: 100%;
     height: auto;
     border-radius: 0.25rem;
     margin: 2rem 0 0.25rem;
-    cursor: pointer;
-    transition: all 0.3s ease;
-  }
-
-  :global(.prose img[alt^="Spoiler:"]) {
-    filter: blur(10px);
-    transition: filter 0.3s ease;
-  }
-
-  :global(.prose img[alt^="Spoiler:"]:hover),
-  :global(.prose img[alt^="Spoiler:"].revealed) {
-    filter: none;
   }
 
   :global(.prose img + em) {
@@ -138,23 +166,15 @@ const metaDescription = post.data.description || `Read ${post.data.title} by Ant
     font-size: 0.9rem;
     color: #00ff00;
     text-shadow: 0 0 8px rgba(0, 255, 0, 0.3);
-    transition: all 0.3s ease;
     margin-top: 0;
     margin-bottom: 2rem;
     opacity: 1;
     font-weight: 500;
   }
 
-  /* Blur captions for spoiler images */
-  :global(.prose img[alt^="Spoiler:"] + em) {
-    filter: blur(10px);
-    transition: filter 0.3s ease;
-  }
-
-  /* Reveal captions when image is revealed */
-  :global(.prose img[alt^="Spoiler:"].revealed + em),
-  :global(.prose img[alt^="Spoiler:"]:hover + em) {
-    filter: none;
+  :global(.prose a) {
+    overflow-wrap: break-word;
+    word-wrap: break-word;
   }
 
   :global(.prose a:hover) {
@@ -167,6 +187,9 @@ const metaDescription = post.data.description || `Read ${post.data.title} by Ant
     width: 100%;
     border-collapse: collapse;
     margin: 1.5rem 0;
+    display: block;
+    overflow-x: auto;
+    max-width: 100%;
   }
 
   :global(.prose th), :global(.prose td) {
@@ -178,23 +201,60 @@ const metaDescription = post.data.description || `Read ${post.data.title} by Ant
     font-style: italic;
     border-left-width: 0.25rem;
     padding-left: 1rem;
-    margin: 1.5rem 0;
+    margin: 2rem 0;
+    line-height: 1.8;
+    overflow-wrap: break-word;
+    word-wrap: break-word;
+  }
+
+  :global(.prose blockquote p) {
+    margin-top: 0.75rem;
+    margin-bottom: 0.75rem;
+  }
+
+  /* Better spacing for strong/bold text */
+  :global(.prose strong) {
+    font-weight: 700;
+    color: var(--hacker-secondary);
   }
 
   /* Optimize lists */
   :global(.prose ul), :global(.prose ol) {
     margin: 1.5rem 0;
     padding-left: 1.5rem;
+    line-height: 1.8;
   }
 
   :global(.prose li) {
-    margin: 0.5rem 0;
+    margin: 0.75rem 0;
+    overflow-wrap: break-word;
+    word-wrap: break-word;
+  }
+
+  :global(.prose li p) {
+    margin-top: 0.5rem;
+    margin-bottom: 0.5rem;
   }
 
   /* Optimize headings */
   :global(.prose h2), :global(.prose h3), :global(.prose h4) {
-    margin-top: 2rem;
-    margin-bottom: 1rem;
+    margin-top: 2.5rem;
+    margin-bottom: 1.25rem;
+    line-height: 1.4;
+    overflow-wrap: break-word;
+    word-wrap: break-word;
+  }
+
+  :global(.prose h2) {
+    font-size: 1.75rem;
+  }
+
+  :global(.prose h3) {
+    font-size: 1.5rem;
+  }
+
+  :global(.prose h4) {
+    font-size: 1.25rem;
   }
 
   /* Optimize inline code */
@@ -202,6 +262,28 @@ const metaDescription = post.data.description || `Read ${post.data.title} by Ant
     padding: 0.2em 0.4em;
     background-color: rgba(0, 255, 0, 0.1);
     border-radius: 0.25rem;
+    font-size: 0.925em;
+    overflow-wrap: break-word;
+    word-wrap: break-word;
+  }
+
+  /* Better spacing for horizontal rules */
+  :global(.prose hr) {
+    margin: 3rem 0;
+    border-color: var(--hacker-primary);
+    opacity: 0.3;
+  }
+
+  /* Add breathing room between different content types */
+  :global(.prose pre + p),
+  :global(.prose pre + ul),
+  :global(.prose pre + ol) {
+    margin-top: 2rem;
+  }
+
+  :global(.prose ul + p),
+  :global(.prose ol + p) {
+    margin-top: 1.5rem;
   }
 </style>
 

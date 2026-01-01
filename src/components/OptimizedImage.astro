@@ -120,37 +120,11 @@ try {
     border-radius: 50%;
     animation: spin 1s linear infinite;
   }
-  
-  .image-container::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: -100%;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(90deg, transparent, rgba(0, 255, 0, 0.1), transparent);
-    transition: left 0.5s ease;
-    pointer-events: none;
-  }
-  
-  .image-container:hover::before {
-    left: 100%;
-  }
-  
+
   @keyframes spin {
     to { transform: translate(-50%, -50%) rotate(360deg); }
   }
-  
-  /* Blur-up effect for progressive loading */
-  .optimized-image.blur-up {
-    filter: blur(10px);
-    transition: filter 0.3s ease;
-  }
-  
-  .optimized-image.blur-up.loaded {
-    filter: blur(0);
-  }
-  
+
   /* Responsive aspect ratios */
   .image-container.aspect-square {
     aspect-ratio: 1 / 1;
@@ -187,11 +161,20 @@ try {
       document.querySelectorAll('img[loading="lazy"]').forEach(img => {
         this.observer.observe(img);
       });
-      
+
       // Setup load event listeners
       document.querySelectorAll('.optimized-image').forEach(img => {
-        img.addEventListener('load', this.handleImageLoad.bind(this));
-        img.addEventListener('error', this.handleImageError.bind(this));
+        const imgElement = img as HTMLImageElement;
+
+        // Check if image is already loaded (cached or eager)
+        if (imgElement.complete && imgElement.naturalHeight !== 0) {
+          // Image already loaded, mark as loaded immediately
+          this.handleImageLoad({ target: imgElement } as Event);
+        } else {
+          // Image not loaded yet, attach listeners
+          imgElement.addEventListener('load', this.handleImageLoad.bind(this));
+          imgElement.addEventListener('error', this.handleImageError.bind(this));
+        }
       });
     }
     
@@ -200,11 +183,12 @@ try {
         if (entry.isIntersecting) {
           const img = entry.target as HTMLImageElement;
           const container = img.closest('.image-container');
-          
-          if (container) {
+
+          // Only add loading class if image isn't already complete
+          if (container && !img.complete) {
             container.classList.add('loading');
           }
-          
+
           this.observer.unobserve(img);
         }
       });

@@ -1,0 +1,27 @@
+---
+
+title: 'Keep It Simple, Stupid'
+pubDate: 2026-01-01
+description: 'Over-engineering is one of your worst enemies'
+tags: ['php', 'symfony', 'api-platform', 'performance']
+draft: false
+---
+
+import OptimizedImage from '../../components/OptimizedImage.astro';
+
+Over-engineering will always cause you trouble, many trouble, but I'll just focus on one today : performance.
+I've stopped counting how many times I've encountered overlooked endpoints that were just the way they were, but after taking a deeper look and a stupid fix I've literally changed user's perspective of an app from slow to blazing fast.
+Many of those times, over-engineering was the culript. An hashmap loading a ton of data in RAM before some heavy treatment for no good reason, an enormous payload returned from the API when only a fraction would have worked... pick your poison.
+
+<u>Stop expecting things that never happen.</u> You're not Google, OpenAI or Anthropic. You're you. Build for yourself. Build for today, adapt tomorrow.
+
+This will avoid having those ridiculous charts :
+
+<OptimizedImage src="/images/blog/hashmapfix_cpu_chart.png" alt="CPU Chart" caption="CPU usage (and spikes) before and after the fix" width={800} height={400} />
+
+<OptimizedImage src="/images/blog/hashmapfix_ram_chart.png" alt="RAM Chart" caption="Memory usage before and after the fix" width={800} height={400} />
+
+or this one :
+
+<OptimizedImage src="/images/blog/unecessary_big_payload_cpu_chart.png" alt="CPU Chart N2" caption="CPU usage (and spikes) before and after another fix" width={800} height={400} />
+
