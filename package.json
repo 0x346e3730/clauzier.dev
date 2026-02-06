@@ -41,7 +41,7 @@
   },
   "devDependencies": {
     "@vitest/ui": "^4.0.18",
-    "esbuild": "^0.27.2",
+    "esbuild": "^0.27.3",
     "happy-dom": "^20.5.0",
     "jsdom": "^28.0.0",
     "rollup-plugin-visualizer": "^6.0.5",
