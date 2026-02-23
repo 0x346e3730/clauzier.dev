@@ -37,7 +37,7 @@
     "rehype-pretty-code": "^0.14.1",
     "rehype-slug": "^6.0.0",
     "remark-gfm": "^4.0.1",
-    "tailwindcss": "^4.2.0"
+    "tailwindcss": "^4.2.1"
   },
   "devDependencies": {
     "@vitest/ui": "^4.0.18",
