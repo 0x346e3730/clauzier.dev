@@ -10,12 +10,13 @@ const experience = calculateExperience();
 
 <TerminalPrompt command="whoami" />
 <div class="text-base leading-relaxed whitespace-pre-wrap mb-6">
-  {PERSONAL_INFO.PROFESSION}, {age} years old passionate hacker based in {PERSONAL_INFO.LOCATION}.
+  {age} years old passionate hacker based in {PERSONAL_INFO.LOCATION}.
 </div>
 
 <TerminalPrompt command="cat about.md" />
 <div class="text-base leading-relaxed whitespace-pre-wrap">
   {experience.years}+ years of experience in the tech industry, especially e-commerce and healthcare.
+  Currently Deputy CTO at OPX.
   Also co-founded and been the president of the biggest e-sports fan club in the world : 
   <a href={PERSONAL_INFO.ORGANIZATIONS.BLUE_WALL.url} 
      class="text-hacker-secondary font-bold border-b-2 border-hacker-secondary hover:text-hacker-primary hover:border-hacker-primary transition-colors duration-300"

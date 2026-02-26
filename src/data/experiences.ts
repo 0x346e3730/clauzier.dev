@@ -2,15 +2,27 @@ import type { Experience } from '../types/experience';
 
 export const experiences: Experience[] = [
   {
-    id: "opx-lead-dev",
-    title: "Lead Dev",
+    id: "opx-deputy-cto",
+    title: "Deputy CTO",
     company: "OPX",
     tags: [
       { label: "Current", colorType: "primary" },
       { label: "Full-time", colorType: "secondary" }
     ],
-    startDate: { month: 3, year: 2025 },
+    startDate: { month: 2, year: 2026 },
     endDate: null,
+    location: "remote",
+    description: []
+  },
+  {
+    id: "opx-lead-dev",
+    title: "Lead Dev",
+    company: "OPX",
+    tags: [
+      { label: "Full-time", colorType: "secondary" }
+    ],
+    startDate: { month: 3, year: 2025 },
+    endDate: { month: 2, year: 2026 },
     location: "remote",
     description: [
       "Tackled various pain points to improve delivery",

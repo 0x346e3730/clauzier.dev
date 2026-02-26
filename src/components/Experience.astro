@@ -98,13 +98,15 @@ const formattedEndDate = exp.endDate
     </div>
   </div>
   
-  <ul class="list-disc list-inside space-y-2 text-base opacity-90 mb-5">
-    {exp.description.map((desc) => (
-      <li class="leading-relaxed pl-1">
-        <span class="pl-1">{desc}</span>
-      </li>
-    ))}
-  </ul>
+  {false && (
+    <ul class="list-disc list-inside space-y-2 text-base opacity-90 mb-5">
+      {exp.description.map((desc) => (
+        <li class="leading-relaxed pl-1">
+          <span class="pl-1">{desc}</span>
+        </li>
+      ))}
+    </ul>
+  )}
 
   {exp.testimonial && (
     <div class="border-t border-hacker-primary/30 pt-5">

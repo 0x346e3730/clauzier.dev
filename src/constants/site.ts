@@ -21,7 +21,7 @@ export const SITE_CONFIG: SiteConfig = {
 export const PERSONAL_INFO = {
   BIRTH_DATE: new Date('1998-05-22'),
   LOCATION: 'Saint-Denis, La Réunion',
-  PROFESSION: 'Lead Dev',
+  PROFESSION: 'Deputy CTO @ OPX',
   ORGANIZATIONS: {
     BLUE_WALL: {
       name: 'Le Blue Wall',
@@ -56,7 +56,7 @@ export const NAVIGATION_ITEMS = [
 
 export const SEO_DEFAULTS = {
   TITLE_TEMPLATE: '%s | Antonin CLAUZIER',
-  DESCRIPTION: 'Personal website and blog of Antonin CLAUZIER, Lead Developer specializing in web technologies.',
+  DESCRIPTION: 'Personal website and blog of Antonin CLAUZIER, Deputy CTO specializing in web technologies.',
   KEYWORDS: ['Antonin CLAUZIER', 'software engineering', 'web development', 'blog'],
   LOCALE: 'en_US',
   SITE_URL: 'https://clauzier.dev',
