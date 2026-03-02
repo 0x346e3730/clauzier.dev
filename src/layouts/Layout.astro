@@ -85,6 +85,10 @@ const buildDate = new Date().toISOString();
       </>
     )}
 
+    {import.meta.env.PROD && (
+      <script src="https://r.clauzier.dev/api/script.js" data-site-id="e32ad5743c7f" defer></script>
+    )}
+
     <!-- Inline critical CSS for above-the-fold content -->
     <style is:inline>
       :root {
