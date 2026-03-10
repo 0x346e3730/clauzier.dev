@@ -22,7 +22,7 @@
     "typecheck": "astro check"
   },
   "dependencies": {
-    "@astrojs/check": "^0.9.6",
+    "@astrojs/check": "^0.9.7",
     "@astrojs/mdx": "^4.3.13",
     "@astrojs/rss": "^4.0.15",
     "@fontsource/monaspace-argon": "^5.2.5",
