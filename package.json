@@ -31,7 +31,7 @@
     "@iconify-json/la": "^1.2.1",
     "@iconify-json/ph": "^1.2.2",
     "@iconify/json": "^2.2.485",
-    "@tailwindcss/vite": "^4.3.0",
+    "@tailwindcss/vite": "^4.3.1",
     "astro": "^6.4.6",
     "astro-icon": "^1.1.5",
     "rehype-autolink-headings": "^7.1.0",
