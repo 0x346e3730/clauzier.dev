@@ -8,7 +8,7 @@
         "@astrojs/check": "^0.9.9",
         "@astrojs/mdx": "^7.0.3",
         "@astrojs/rss": "^4.0.19",
-        "@fontsource/monaspace-argon": "^5.2.5",
+        "@fontsource/monaspace-argon": "^5.3.0",
         "@fontsource/monaspace-neon": "^5.2.5",
         "@fontsource/monaspace-radon": "^5.2.5",
         "@iconify-json/la": "^1.2.1",
@@ -388,7 +388,7 @@
 
     "@exodus/bytes": ["@exodus/bytes@1.15.0", "", { "peerDependencies": { "@noble/hashes": "^1.8.0 || ^2.0.0" }, "optionalPeers": ["@noble/hashes"] }, "sha512-UY0nlA+feH81UGSHv92sLEPLCeZFjXOuHhrIo0HQydScuQc8s0A7kL/UdgwgDq8g8ilksmuoF35YVTNphV2aBQ=="],
 
-    "@fontsource/monaspace-argon": ["@fontsource/monaspace-argon@5.2.5", "", {}, "sha512-EJ+jq1Smm3BB+8RK/gwB1uzjrSKdycZkKm8OZGCYvqJiTChKcGe7b2lmj0PmQbb/+lAEdCBIAcFLlPaWhtRANA=="],
+    "@fontsource/monaspace-argon": ["@fontsource/monaspace-argon@5.3.0", "", {}, "sha512-sfP9wbeL7OLt/vxHCOtssa4AadPFjQAClYg1rl+PybqfJLw8yG86f8q3qtx4dCHpsN82x8Cb2z0BmP7y93QUNQ=="],
 
     "@fontsource/monaspace-neon": ["@fontsource/monaspace-neon@5.2.5", "", {}, "sha512-TjSSuHC37DroyhP5YCKRCAxdUb3In/uqHzqqW/8Ul+JWilz37d8lr8jFeapnbD3QdYXgiQoU2Rf/CmTdyl06DA=="],
 
