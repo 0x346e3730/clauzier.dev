@@ -9,7 +9,7 @@
         "@astrojs/mdx": "^7.0.3",
         "@astrojs/rss": "^4.0.19",
         "@fontsource/monaspace-argon": "^5.3.0",
-        "@fontsource/monaspace-neon": "^5.2.5",
+        "@fontsource/monaspace-neon": "^5.3.0",
         "@fontsource/monaspace-radon": "^5.2.5",
         "@iconify-json/la": "^1.2.1",
         "@iconify-json/ph": "^1.2.2",
@@ -390,7 +390,7 @@
 
     "@fontsource/monaspace-argon": ["@fontsource/monaspace-argon@5.3.0", "", {}, "sha512-sfP9wbeL7OLt/vxHCOtssa4AadPFjQAClYg1rl+PybqfJLw8yG86f8q3qtx4dCHpsN82x8Cb2z0BmP7y93QUNQ=="],
 
-    "@fontsource/monaspace-neon": ["@fontsource/monaspace-neon@5.2.5", "", {}, "sha512-TjSSuHC37DroyhP5YCKRCAxdUb3In/uqHzqqW/8Ul+JWilz37d8lr8jFeapnbD3QdYXgiQoU2Rf/CmTdyl06DA=="],
+    "@fontsource/monaspace-neon": ["@fontsource/monaspace-neon@5.3.0", "", {}, "sha512-a4B4L4nmW+mW42gDb6JUugy2fA3DC0QKi2yRMXKzuNsN+wHhUvrqgYndIBMds+Evq/cWaMJgd06x14dHuBNxwA=="],
 
     "@fontsource/monaspace-radon": ["@fontsource/monaspace-radon@5.2.5", "", {}, "sha512-mG6ltrFW5BYmcoRvVIKboCORZu8BeGg6h5zV5rnwEmFcjv8Bltua3KOj6aOxWbrR4PYnKyR17lNqSsjR8kx4bQ=="],
 
