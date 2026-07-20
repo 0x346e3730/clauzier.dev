@@ -10,7 +10,7 @@
         "@astrojs/rss": "^4.0.19",
         "@fontsource/monaspace-argon": "^5.3.0",
         "@fontsource/monaspace-neon": "^5.3.0",
-        "@fontsource/monaspace-radon": "^5.2.5",
+        "@fontsource/monaspace-radon": "^5.3.0",
         "@iconify-json/la": "^1.2.1",
         "@iconify-json/ph": "^1.2.2",
         "@iconify/json": "^2.2.500",
@@ -392,7 +392,7 @@
 
     "@fontsource/monaspace-neon": ["@fontsource/monaspace-neon@5.3.0", "", {}, "sha512-a4B4L4nmW+mW42gDb6JUugy2fA3DC0QKi2yRMXKzuNsN+wHhUvrqgYndIBMds+Evq/cWaMJgd06x14dHuBNxwA=="],
 
-    "@fontsource/monaspace-radon": ["@fontsource/monaspace-radon@5.2.5", "", {}, "sha512-mG6ltrFW5BYmcoRvVIKboCORZu8BeGg6h5zV5rnwEmFcjv8Bltua3KOj6aOxWbrR4PYnKyR17lNqSsjR8kx4bQ=="],
+    "@fontsource/monaspace-radon": ["@fontsource/monaspace-radon@5.3.0", "", {}, "sha512-aadcdk9Gg4yOwk4Zei93k3pzL1jufhrPQIxpLluqO+RoVv5MoSqNlsvFuYEEthE5N1ORaS3RleohBdP0yBzDGQ=="],
 
     "@iconify-json/la": ["@iconify-json/la@1.2.1", "", { "dependencies": { "@iconify/types": "*" } }, "sha512-7VUpZ+E7PfBpCXmAzLEGRR0LqCyFQRJiJTriO/vIZtQ1BLJ4xiDlIQ8gCCQvyTnKPG4IrvencwAxXpJGhk4pYg=="],
 
