@@ -42,7 +42,7 @@
     "typescript": "^7.0.2"
   },
   "devDependencies": {
-    "@vitest/ui": "^4.1.10",
+    "@vitest/ui": "^4.1.11",
     "esbuild": "^0.28.2",
     "happy-dom": "^20.11.2",
     "jsdom": "^30.0.1",
