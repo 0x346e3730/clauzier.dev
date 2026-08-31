@@ -47,7 +47,7 @@
     "happy-dom": "^20.11.13",
     "jsdom": "^30.0.1",
     "rollup-plugin-visualizer": "^7.1.1",
-    "terser": "^5.50.0",
+    "terser": "^5.51.2",
     "vitest": "^4.1.11",
     "workbox-build": "^7.4.1",
     "workbox-window": "^7.4.1"
